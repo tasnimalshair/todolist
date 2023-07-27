@@ -1,0 +1,1 @@
+{"version":3,"file":"task.provider.js","sourceRoot":"","sources":["../../../src/task/task.provider.ts"],"names":[],"mappings":";;;AAAA,mDAAoD;AACpD,6CAAoC;AAEvB,QAAA,YAAY,GAAG;IAC1B;QACE,OAAO,EAAE,wBAAY,CAAC,eAAe;QACrC,UAAU,EAAE,GAAG,EAAE;YACf,OAAO,iBAAI,CAAC;QACd,CAAC;KACF;CACF,CAAC"}
