@@ -1,8 +1,11 @@
 import { CanActivate, ExecutionContext } from '@nestjs/common';
-import { Observable } from 'rxjs';
 import { JwtService } from '@nestjs/jwt';
+import { Reflector } from '@nestjs/core';
+import { UserService } from 'src/user/user.service';
 export declare class TokenAuthGuard implements CanActivate {
     private jwtService;
-    constructor(jwtService: JwtService);
-    canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean>;
+    private reflector;
+    private userService;
+    constructor(jwtService: JwtService, reflector: Reflector, userService: UserService);
+    canActivate(context: ExecutionContext): Promise<boolean>;
 }

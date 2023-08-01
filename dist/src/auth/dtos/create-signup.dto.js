@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateSignupUserDto = void 0;
 const class_validator_1 = require("class-validator");
+const role_enum_1 = require("../../roles/role.enum");
 class CreateSignupUserDto {
 }
 __decorate([
@@ -22,6 +23,7 @@ __decorate([
     (0, class_validator_1.IsEmail)(),
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
+    (0, class_validator_1.Matches)(/^[\w-]+(?:\.[\w-]+)*@(?:[\w-]+\.)+[a-zA-Z]{2,}$/),
     __metadata("design:type", String)
 ], CreateSignupUserDto.prototype, "email", void 0);
 __decorate([
@@ -30,5 +32,9 @@ __decorate([
     (0, class_validator_1.MinLength)(6),
     __metadata("design:type", String)
 ], CreateSignupUserDto.prototype, "password", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateSignupUserDto.prototype, "role", void 0);
 exports.CreateSignupUserDto = CreateSignupUserDto;
 //# sourceMappingURL=create-signup.dto.js.map

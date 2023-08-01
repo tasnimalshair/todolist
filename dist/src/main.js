@@ -3,11 +3,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@nestjs/core");
 const app_module_1 = require("./app.module");
 const common_1 = require("@nestjs/common");
-const dotenv = require("dotenv");
+const core_2 = require("@nestjs/core");
+const TokenAuthGuard_1 = require("./guard/TokenAuthGuard");
+const user_service_1 = require("./user/user.service");
+const jwt_1 = require("@nestjs/jwt");
+const logger_service_1 = require("./logger/logger.service");
 async function bootstrap() {
-    dotenv.config();
-    const app = await core_1.NestFactory.create(app_module_1.AppModule);
+    const app = await core_1.NestFactory.create(app_module_1.AppModule, {
+        bufferLogs: true,
+    });
     app.useGlobalPipes(new common_1.ValidationPipe({ whitelist: true }));
+    app.useGlobalGuards(new TokenAuthGuard_1.TokenAuthGuard(app.get(jwt_1.JwtService), new core_2.Reflector(), app.get(user_service_1.UserService)));
+    app.useLogger(new logger_service_1.LoggerService());
     await app.listen(3000);
 }
 bootstrap();

@@ -12,45 +12,64 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Task = void 0;
 const sequelize_typescript_1 = require("sequelize-typescript");
 const user_model_1 = require("../user/user.model");
+const { DATE, NUMBER, STRING } = sequelize_typescript_1.DataType;
 let Task = class Task extends sequelize_typescript_1.Model {
 };
 __decorate([
     sequelize_typescript_1.PrimaryKey,
     sequelize_typescript_1.AutoIncrement,
-    sequelize_typescript_1.Column,
+    (0, sequelize_typescript_1.Column)(NUMBER),
     __metadata("design:type", Number)
 ], Task.prototype, "id", void 0);
 __decorate([
-    sequelize_typescript_1.Column,
+    (0, sequelize_typescript_1.Column)(STRING),
     __metadata("design:type", String)
 ], Task.prototype, "name", void 0);
 __decorate([
-    sequelize_typescript_1.Column,
+    (0, sequelize_typescript_1.Column)(STRING),
     __metadata("design:type", String)
 ], Task.prototype, "description", void 0);
 __decorate([
-    sequelize_typescript_1.Column,
+    (0, sequelize_typescript_1.Column)(NUMBER),
     __metadata("design:type", Number)
 ], Task.prototype, "priority", void 0);
 __decorate([
-    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.DATE),
+    (0, sequelize_typescript_1.Column)(DATE),
     __metadata("design:type", Date)
 ], Task.prototype, "createdAt", void 0);
 __decorate([
-    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.DATE),
+    (0, sequelize_typescript_1.Column)(DATE),
     __metadata("design:type", Date)
 ], Task.prototype, "updatedAt", void 0);
 __decorate([
     (0, sequelize_typescript_1.ForeignKey)(() => user_model_1.User),
-    sequelize_typescript_1.Column,
+    (0, sequelize_typescript_1.Column)(NUMBER),
     __metadata("design:type", Number)
 ], Task.prototype, "userId", void 0);
 __decorate([
     (0, sequelize_typescript_1.BelongsTo)(() => user_model_1.User),
     __metadata("design:type", user_model_1.User)
 ], Task.prototype, "user", void 0);
+__decorate([
+    (0, sequelize_typescript_1.Column)(DATE),
+    __metadata("design:type", Date)
+], Task.prototype, "deletedAt", void 0);
+__decorate([
+    (0, sequelize_typescript_1.Column)(STRING),
+    __metadata("design:type", String)
+], Task.prototype, "createdBy", void 0);
+__decorate([
+    (0, sequelize_typescript_1.Column)(STRING),
+    __metadata("design:type", String)
+], Task.prototype, "updatedBy", void 0);
+__decorate([
+    (0, sequelize_typescript_1.Column)(STRING),
+    __metadata("design:type", String)
+], Task.prototype, "deletedBy", void 0);
 Task = __decorate([
-    (0, sequelize_typescript_1.Table)({})
+    (0, sequelize_typescript_1.Table)({
+        paranoid: true,
+    })
 ], Task);
 exports.Task = Task;
 //# sourceMappingURL=task.model.js.map

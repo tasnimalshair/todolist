@@ -13,6 +13,7 @@ const auth_controller_1 = require("./auth.controller");
 const jwt_1 = require("@nestjs/jwt");
 const user_provider_1 = require("../user/user.provider");
 const user_module_1 = require("../user/user.module");
+const db_module_1 = require("../db/db.module");
 require('dotenv').config();
 let AuthModule = class AuthModule {
 };
@@ -24,7 +25,8 @@ AuthModule = __decorate([
                 secret: process.env.JWT_SECRET,
                 signOptions: { expiresIn: process.env.JWT_EXPIRE },
             }),
-            user_module_1.UserModule
+            user_module_1.UserModule,
+            db_module_1.DatabaseModule
         ],
         providers: [auth_service_1.AuthService, ...user_provider_1.UserProvider],
         controllers: [auth_controller_1.AuthController],

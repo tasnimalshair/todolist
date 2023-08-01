@@ -24,17 +24,38 @@ module.exports = {
         type: Sequelize.STRING,
       },
 
+      role: {
+        type: Sequelize.STRING
+      },
+
 
       createdAt: {
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'), allowNull: false,
         type: Sequelize.DATE
       },
 
+      createdBy: {
+        type: Sequelize.STRING,
+      },
+
+
       updatedAt: {
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-        allowNull: false,
         type: Sequelize.DATE,
       },
+
+      updatedBy: {
+        type: Sequelize.STRING,
+      },
+
+      deletedAt: {
+        type: Sequelize.DATE,
+      },
+
+      deletedBy: {
+        type: Sequelize.STRING,
+      },
+
+
     });
   },
 

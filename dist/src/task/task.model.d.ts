@@ -1,5 +1,5 @@
 import { Model } from 'sequelize-typescript';
-import { User } from 'src/user/user.model';
+import { User } from '../user/user.model';
 export declare class Task extends Model<Task> {
     id: number;
     name: string;
@@ -9,4 +9,8 @@ export declare class Task extends Model<Task> {
     updatedAt: Date;
     userId: number;
     user: User;
+    deletedAt: Date;
+    createdBy: string;
+    updatedBy: string;
+    deletedBy: string;
 }

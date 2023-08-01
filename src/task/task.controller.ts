@@ -4,64 +4,60 @@ import {
   Post,
   Body,
   Param,
-  Res,
   Delete,
-  UseGuards,
+
 } from '@nestjs/common';
 import { TaskService } from './task.service';
 import { CreateTaskDto } from './dtos/create-task.dto';
-import { returnRes } from 'shared/commons';
-import { UserService } from 'src/user/user.service';
-import { UserId } from 'src/decorators/user.decorator';
-import { TokenAuthGuard } from 'src/guard/TokenAuthGuard';
+import { User } from '../decorators/user.decorator';
+import { Roles } from '../decorators/roles.decorator';
+import { Role } from '../roles/role.enum';
+import { UpdateTaskDto } from './dtos/update-task.dto';
 
 
-@Controller('task')
-@UseGuards(TokenAuthGuard)
+@Controller('tasks')
+@Roles(Role.Admin)
 export class TaskController {
   constructor(private taskService: TaskService) { }
 
+
+  // TODO: USERID known after pipe validation
+  @Roles(Role.User)
   @Post()
-  async addTask(@Res() res, @Body() body: CreateTaskDto, @UserId() userId) {
-    await this.taskService.addTask(body.name, body.description, body.priority, userId);
-    returnRes(res, 200, true, 'Task Added Successfully.', []);
+  async addTask(@Body() body: CreateTaskDto, @User() user) {
+    console.log('UUUUUUUUUUSER',user.id);
+    
+    await this.taskService.addTask(body.name, body.description, body.priority, user.id);
+    return 'Task Added Successfully.';
   }
 
 
   @Get()
-  async getAllTasks(@Res() res, @UserId() userId) {
-    const tasks = await this.taskService.getTasks(userId);
-    returnRes(res, 200, true, '', tasks);
+  @Roles(Role.User)
+  async getAllTasks(@User() user) {
+    const tasks = await this.taskService.getTasks({ where: { userId: user.id } });
+    return tasks;
   }
 
 
   @Delete(':id')
-  async deleteTask(@Res() res, @Param('id') id: number, @UserId() userId) {
-    await this.taskService.deleteTask(id, userId);
-    returnRes(
-      res,
-      200,
-      true,
-      `Task with id ${id} was Deleted Successfully`,
-      [],
-    );
+  async deleteTask(@Param('id') id: number, @User() user) {
+    await this.taskService.deleteTask(id, user.id);
+    return `Task with id ${id} was Deleted Successfully`;
   }
 
+
   @Post(':id')
+  @Roles(Role.User)
   async updateTask(
-    @Res() res,
     @Param('id') id: number,
-    @Body() body: CreateTaskDto,
-    @UserId() userId
+    @Body() body: UpdateTaskDto,
+    @User() user
   ) {
-    const task = await this.taskService.updateTask(id, body, userId);
-    returnRes(
-      res,
-      200,
-      true,
-      `Task with id ${id} was Updated Successfully`,
-      task,
-    );
+
+    console.log('user.id',user.id);
+    const task = await this.taskService.updateTask(id, body, user.id);
+    return `Task with id ${id} was Updated Successfully`;
   }
 
 }

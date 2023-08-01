@@ -9,43 +9,52 @@ import {
   DataType,
   BelongsTo,
 } from 'sequelize-typescript';
-import { User } from 'src/user/user.model';
+import { User } from '../user/user.model';
+const { DATE, NUMBER, STRING } = DataType;
+
 
 @Table({
-  // tableName: 'Tasks',
-  // underscored: true,
-  // paranoid: true,
+  paranoid: true,
 })
 export class Task extends Model<Task> {
   @PrimaryKey
   @AutoIncrement
-  @Column
+  @Column(NUMBER)
   id: number;
 
-  @Column
+  @Column(STRING)
   name: string;
 
-  @Column
+  @Column(STRING)
   description: string;
 
-  @Column
+  @Column(NUMBER)
   priority: number;
 
-  @Column(DataType.DATE)
+  @Column(DATE)
   createdAt: Date;
 
-  @Column(DataType.DATE)
+  @Column(DATE)
   updatedAt: Date;
 
   @ForeignKey(() => User)
-  @Column
-  userId: number; 
+  @Column(NUMBER)
+  userId: number;
 
 
   @BelongsTo(() => User)
   user: User;
 
-  // static associate(models: any) {
-    // Task.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
-  // }
+  @Column(DATE)
+  deletedAt: Date;
+
+  @Column(STRING)
+  createdBy: string;
+
+  @Column(STRING)
+  updatedBy: string;
+
+  @Column(STRING)
+  deletedBy: string;
+
 }

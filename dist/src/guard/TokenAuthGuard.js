@@ -12,11 +12,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.TokenAuthGuard = void 0;
 const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
+const core_1 = require("@nestjs/core");
+const rules_guard_1 = require("./rules.guard");
+const user_service_1 = require("../user/user.service");
 let TokenAuthGuard = class TokenAuthGuard {
-    constructor(jwtService) {
+    constructor(jwtService, reflector, userService) {
         this.jwtService = jwtService;
+        this.reflector = reflector;
+        this.userService = userService;
     }
-    canActivate(context) {
+    async canActivate(context) {
+        const _isPublic = this.reflector.get('isPublic', context.getHandler());
+        if (_isPublic) {
+            return true;
+        }
         const request = context.switchToHttp().getRequest();
         const authHeader = request.headers.authorization;
         if (!authHeader) {
@@ -28,8 +37,10 @@ let TokenAuthGuard = class TokenAuthGuard {
         }
         try {
             const decoded = this.jwtService.verify(token);
-            request.user = decoded;
-            return true;
+            const user = await this.userService.findById(decoded.id);
+            request.user = user.dataValues;
+            const roleGuard = new rules_guard_1.RoleGuard(this.reflector);
+            return roleGuard.canActivate(context);
         }
         catch (error) {
             return false;
@@ -38,7 +49,9 @@ let TokenAuthGuard = class TokenAuthGuard {
 };
 TokenAuthGuard = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [jwt_1.JwtService])
+    __metadata("design:paramtypes", [jwt_1.JwtService,
+        core_1.Reflector,
+        user_service_1.UserService])
 ], TokenAuthGuard);
 exports.TokenAuthGuard = TokenAuthGuard;
 //# sourceMappingURL=TokenAuthGuard.js.map

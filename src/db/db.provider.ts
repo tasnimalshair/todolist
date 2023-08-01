@@ -8,7 +8,7 @@ import { User } from '../user/user.model';
 
 export const databaseProvider = [
   {
-    provide: PROVIDERS.DATABASE_PROVIDER,
+    provide: 'sequelize',
     useFactory: (configService: ConfigService) => {
       const sequelize = new Sequelize({
         ...configService.get(DATABASE_CONFIG),

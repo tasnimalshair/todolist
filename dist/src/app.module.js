@@ -15,6 +15,7 @@ const config_2 = require("@nestjs/config");
 const task_module_1 = require("./task/task.module");
 const user_module_1 = require("./user/user.module");
 const db_module_1 = require("./db/db.module");
+const logger_module_1 = require("./logger/logger.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -25,6 +26,7 @@ AppModule = __decorate([
             auth_module_1.AuthModule,
             guard_module_1.GuardModule,
             db_module_1.DatabaseModule,
+            logger_module_1.LoggerModule,
             config_2.ConfigModule.forRoot({
                 load: [config_1.default],
                 isGlobal: true,

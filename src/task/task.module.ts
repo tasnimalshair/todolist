@@ -7,10 +7,11 @@ import { AuthService } from 'src/auth/auth.service';
 import { UserService } from 'src/user/user.service';
 import { UserModule } from 'src/user/user.module';
 import { TaskProvider } from './task.provider';
-// import { TaskProvider } from './task.provider';
+import { LoggerModule } from 'src/logger/logger.module';
+
 
 @Module({
-  // exports: [SequelizeModule],
+  imports: [LoggerModule],
   controllers: [TaskController],
   providers: [TaskService, ...TaskProvider],
 })

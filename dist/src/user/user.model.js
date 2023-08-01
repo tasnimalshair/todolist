@@ -10,31 +10,28 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
-const class_validator_1 = require("class-validator");
 const sequelize_typescript_1 = require("sequelize-typescript");
+const role_enum_1 = require("../roles/role.enum");
 const task_model_1 = require("../task/task.model");
+const { ENUM, DATE, NUMBER, STRING } = sequelize_typescript_1.DataType;
 let User = class User extends sequelize_typescript_1.Model {
 };
 __decorate([
     sequelize_typescript_1.PrimaryKey,
     sequelize_typescript_1.AutoIncrement,
-    sequelize_typescript_1.Column,
+    (0, sequelize_typescript_1.Column)(NUMBER),
     __metadata("design:type", Number)
 ], User.prototype, "id", void 0);
 __decorate([
-    (0, class_validator_1.IsNotEmpty)(),
-    sequelize_typescript_1.Column,
+    (0, sequelize_typescript_1.Column)(STRING),
     __metadata("design:type", String)
 ], User.prototype, "name", void 0);
 __decorate([
-    (0, class_validator_1.IsNotEmpty)(),
-    sequelize_typescript_1.IsEmail,
-    sequelize_typescript_1.Column,
+    (0, sequelize_typescript_1.Column)(STRING),
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);
 __decorate([
-    (0, class_validator_1.IsNotEmpty)(),
-    sequelize_typescript_1.Column,
+    (0, sequelize_typescript_1.Column)(STRING),
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 __decorate([
@@ -42,15 +39,40 @@ __decorate([
     __metadata("design:type", Array)
 ], User.prototype, "tasks", void 0);
 __decorate([
-    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.DATE),
+    (0, sequelize_typescript_1.Column)({
+        type: ENUM,
+        values: Object.keys(role_enum_1.Role)
+    }),
+    __metadata("design:type", String)
+], User.prototype, "role", void 0);
+__decorate([
+    (0, sequelize_typescript_1.Column)(DATE),
     __metadata("design:type", Date)
 ], User.prototype, "createdAt", void 0);
 __decorate([
-    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.DATE),
+    (0, sequelize_typescript_1.Column)(DATE),
     __metadata("design:type", Date)
 ], User.prototype, "updatedAt", void 0);
+__decorate([
+    (0, sequelize_typescript_1.Column)(DATE),
+    __metadata("design:type", Date)
+], User.prototype, "deletedAt", void 0);
+__decorate([
+    (0, sequelize_typescript_1.Column)(STRING),
+    __metadata("design:type", String)
+], User.prototype, "createdBy", void 0);
+__decorate([
+    (0, sequelize_typescript_1.Column)(STRING),
+    __metadata("design:type", String)
+], User.prototype, "updatedBy", void 0);
+__decorate([
+    (0, sequelize_typescript_1.Column)(STRING),
+    __metadata("design:type", String)
+], User.prototype, "deletedBy", void 0);
 User = __decorate([
-    (0, sequelize_typescript_1.Table)({})
+    (0, sequelize_typescript_1.Table)({
+        paranoid: true,
+    })
 ], User);
 exports.User = User;
 //# sourceMappingURL=user.model.js.map

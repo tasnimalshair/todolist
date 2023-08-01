@@ -15,31 +15,46 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.TaskService = void 0;
 const common_1 = require("@nestjs/common");
 const constants_1 = require("../common/constants");
+const logger_service_1 = require("../logger/logger.service");
 let TaskService = class TaskService {
-    constructor(taskModel) {
+    constructor(taskModel, logger) {
         this.taskModel = taskModel;
+        this.logger = logger;
     }
-    async addTask(name, description, priority, userId) {
-        return await this.taskModel.create({ name, description, priority, userId });
+    addTask(name, description, priority, userId) {
+        this.logger.myLog();
+        return this.taskModel.create({ name, description, priority, userId });
     }
-    async getTasks(id) {
-        return await this.taskModel.findAll({ where: { userId: id } });
+    getTasks(options) {
+        return this.taskModel.findAll(options);
     }
     async deleteTask(id, userId) {
-        this.taskModel.destroy({ where: { id, userId } });
+        const taskToDelete = await this.taskModel.findOne({ where: { id, userId } });
+        if (!taskToDelete) {
+            throw new common_1.NotFoundException('Task not found');
+        }
+        (await taskToDelete).deletedBy = userId;
+        (await taskToDelete).save();
+        await this.taskModel.destroy({ where: { id, userId } });
     }
     async updateTask(id, task, userId) {
-        const [updatedRows] = await this.taskModel.update(task, { where: { id, userId } });
+        const _task = this.taskModel.findOne({ where: { id, userId } });
+        if (!_task) {
+            return 'No task with this id!';
+        }
+        const [updatedRows] = await this.taskModel.update({ ...task }, { where: { id, userId } });
         if (updatedRows === 0) {
             throw new common_1.NotFoundException(`Task with ID ${id} not found.`);
         }
-        return await this.taskModel.findByPk(id);
+        (await _task).updatedBy = userId;
+        (await _task).save();
+        return _task;
     }
 };
 TaskService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(constants_1.REPOSITORIES.TASK_REPOSITORY)),
-    __metadata("design:paramtypes", [Object])
+    __metadata("design:paramtypes", [Object, logger_service_1.LoggerService])
 ], TaskService);
 exports.TaskService = TaskService;
 //# sourceMappingURL=task.service.js.map

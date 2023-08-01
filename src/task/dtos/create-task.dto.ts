@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
-import { IsString, IsNumber, IsBoolean, IsObject } from 'class-validator';
+import { Optional } from '@nestjs/common';
+import { IsString, IsNumber } from 'class-validator';
 
 export class CreateTaskDto {
 
@@ -12,4 +13,6 @@ export class CreateTaskDto {
   @IsNumber()
   priority: number;
 
+  // @IsNumber({})
+  // userId: number; 
 }

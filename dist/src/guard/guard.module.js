@@ -9,12 +9,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.GuardModule = void 0;
 const common_1 = require("@nestjs/common");
 const TokenAuthGuard_1 = require("./TokenAuthGuard");
+const rules_guard_1 = require("./rules.guard");
+const user_module_1 = require("../user/user.module");
 let GuardModule = class GuardModule {
 };
 GuardModule = __decorate([
     (0, common_1.Module)({
-        providers: [TokenAuthGuard_1.TokenAuthGuard],
-        exports: [TokenAuthGuard_1.TokenAuthGuard]
+        imports: [user_module_1.UserModule],
+        providers: [TokenAuthGuard_1.TokenAuthGuard, rules_guard_1.RoleGuard],
+        exports: [TokenAuthGuard_1.TokenAuthGuard, rules_guard_1.RoleGuard]
     })
 ], GuardModule);
 exports.GuardModule = GuardModule;

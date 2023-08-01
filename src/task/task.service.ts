@@ -1,40 +1,58 @@
 import { Inject, Injectable, NotFoundException, Optional } from '@nestjs/common';
 import { Task } from './task.model';
-import { InjectModel } from '@nestjs/sequelize';
 import { CreateTaskDto } from './dtos/create-task.dto';
 import { UpdateTaskDto } from './dtos/update-task.dto';
 import { REPOSITORIES } from 'src/common/constants';
-import { User } from 'src/user/user.model';
-// import { User } from 'src/auth/user.model';
+import { LoggerService } from '../logger/logger.service';
+import { FindOptions, where } from 'sequelize';
 
 @Injectable()
 export class TaskService {
   constructor(
     @Inject(REPOSITORIES.TASK_REPOSITORY)
     private taskModel: typeof Task,
+    private logger: LoggerService
   ) { }
 
 
-  async addTask(name: string, description: string, priority: number, userId: number) {
-    return await this.taskModel.create({ name, description, priority, userId });
+
+  addTask(name: string, description: string, priority: number, userId: number) {
+    this.logger.myLog();
+    return this.taskModel.create({ name, description, priority, userId });
   }
 
 
-  async getTasks(id) {
-    return await this.taskModel.findAll({ where: { userId: id } });
+  getTasks(options: FindOptions) {
+    return this.taskModel.findAll(options)
   }
-
 
   async deleteTask(id: number, userId: string) {
-    this.taskModel.destroy({ where: { id, userId } });
+    const taskToDelete = await this.taskModel.findOne({ where: { id, userId } });
+
+    if (!taskToDelete) {
+      throw new NotFoundException('Task not found');
+    }
+    
+    (await taskToDelete).deletedBy = userId;
+
+    (await taskToDelete).save();
+    await this.taskModel.destroy({ where: { id, userId } });
   }
 
   async updateTask(id: number, task: UpdateTaskDto, userId: string) {
-    const [updatedRows] = await this.taskModel.update(task, { where: { id, userId } });
+    const _task = this.taskModel.findOne({ where: { id, userId } });
+    if (!_task) {
+      return 'No task with this id!';
+    }
+
+    const [updatedRows] = await this.taskModel.update({ ...task }, { where: { id, userId } });
     if (updatedRows === 0) {
       throw new NotFoundException(`Task with ID ${id} not found.`);
     }
-    return await this.taskModel.findByPk(id);
+    (await _task).updatedBy = userId;
+    (await _task).save();
+
+    return _task;
   }
 
 }

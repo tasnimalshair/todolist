@@ -1,15 +1,11 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { SequelizeModule } from '@nestjs/sequelize';
 import { JwtModule } from '@nestjs/jwt';
-// import { User } from './user.model';
 import { UserProvider } from '../user/user.provider';
-import { UserModule } from 'src/user/user.module';
+import { UserModule } from '../user/user.module';
+import { DatabaseModule } from 'src/db/db.module';
 require('dotenv').config();
-
-
-
 
 @Module({
   imports: [
@@ -19,7 +15,8 @@ require('dotenv').config();
     signOptions: { expiresIn: process.env.JWT_EXPIRE },
     
   }),
-  UserModule
+  UserModule,
+  DatabaseModule
   ],
   providers: [AuthService, ...UserProvider],
   controllers: [AuthController],

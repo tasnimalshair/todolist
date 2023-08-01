@@ -8,7 +8,7 @@ const task_model_1 = require("../task/task.model");
 const user_model_1 = require("../user/user.model");
 exports.databaseProvider = [
     {
-        provide: constants_1.PROVIDERS.DATABASE_PROVIDER,
+        provide: 'sequelize',
         useFactory: (configService) => {
             const sequelize = new sequelize_typescript_1.Sequelize({
                 ...configService.get(constants_1.DATABASE_CONFIG),

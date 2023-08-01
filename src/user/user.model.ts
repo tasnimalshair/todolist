@@ -1,54 +1,60 @@
-/* eslint-disable prettier/prettier */
-import { IsNotEmpty } from 'class-validator';
 import {
-    Column,
-    Model,
-    Table,
-    PrimaryKey,
-    AutoIncrement,
-    IsEmail,
-    HasMany,
-    DataType,
-    
-  } from 'sequelize-typescript';
-import { Task } from 'src/task/task.model';
-  
+  Column,
+  Model,
+  Table,
+  PrimaryKey,
+  AutoIncrement,
+  HasMany,
+  DataType,
+
+} from 'sequelize-typescript';
+import { Role } from '../roles/role.enum';
+import { Task } from '../task/task.model';
+
+const { ENUM, DATE, NUMBER, STRING } = DataType;
+
 @Table({
-  // tableName: 'Users',
-  // underscored: true,
-  // paranoid: true,
+  paranoid: true,
 })
-  export class User extends Model<User> {
-    @PrimaryKey
-    @AutoIncrement
-    @Column
-    id: number;
+export class User extends Model<User> {
+  @PrimaryKey
+  @AutoIncrement
+  @Column(NUMBER)
+  id: number;
 
-    @IsNotEmpty()
-    @Column
-    name:string;
-    
-    @IsNotEmpty()
-    @IsEmail
-    @Column
-    email: string;
+  @Column(STRING)
+  name: string;
 
-    @IsNotEmpty()
-    @Column
-    password: string;
+  @Column(STRING)
+  email: string;
 
-    @HasMany(() => Task)
+  @Column(STRING)
+  password: string;
+
+  @HasMany(() => Task)
   tasks: Task[];
 
-  @Column(DataType.DATE)
+  @Column({
+    type: ENUM,
+    values: Object.keys(Role)
+  })
+  role: Role;
+
+  @Column(DATE)
   createdAt: Date;
 
-  @Column(DataType.DATE)
+  @Column(DATE)
   updatedAt: Date;
 
-  // static associate(models: any) {
-  //   User.hasMany(models.Task, { foreignKey: 'userId', as: 'tasks' });
-  // }
+  @Column(DATE)
+  deletedAt: Date;
 
-  }
-  
+  @Column(STRING)
+  createdBy: string;
+
+  @Column(STRING)
+  updatedBy: string;
+
+  @Column(STRING)
+  deletedBy: string;
+}

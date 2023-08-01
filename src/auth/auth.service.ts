@@ -1,7 +1,10 @@
-import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException, Req, UseInterceptors } from "@nestjs/common";
 import { hashSync, compareSync } from "bcryptjs";
 import { UserService } from "src/user/user.service";
 import { JwtService } from '@nestjs/jwt';
+import { Transaction } from "../decorators/transaction.decorator";
+import { CreateSignupUserDto } from "./dtos/create-signup.dto";
+import { CreateSigninUserDto } from "./dtos/create-signin.dto";
 
 
 
@@ -10,26 +13,30 @@ export class AuthService {
     constructor(private userService: UserService,
         private jwtService: JwtService) { }
 
-    async signup(name: string, email: string, password: string) {
-        const users = await this.userService.find(email);
-        if (users.length) {
+    async signup(createSignupUserDto: CreateSignupUserDto, @Transaction() transaction) {
+        const _user = await this.userService.findOne({ where: { email: createSignupUserDto.email } }, transaction);
+        if (_user) {
             throw new BadRequestException('Email already exists ,please change it.');
         }
 
-        const encryptedPass: string = hashSync(password, 10);
-
-        const user = await this.userService.create(name, email, encryptedPass);
+        const encryptedPass = hashSync(createSignupUserDto.password, 10);
+        createSignupUserDto.password = encryptedPass;
+        const user = await this.userService.create(createSignupUserDto, transaction);
 
         return user;
 
     }
 
-    async signin(email: string, password: string) {
-        const [user] = await this.userService.find(email);
+    async signin(createSigninUserDto: CreateSigninUserDto, @Transaction() transaction) {
+        const user = await this.userService.findOne({ where: { email: createSigninUserDto.email } }, transaction);
         if (!user) {
             throw new NotFoundException('User not found.');
         }
-        const isPass = compareSync(password, user.password);
+        console.log(createSigninUserDto.password);
+
+        const isPass = compareSync(createSigninUserDto.password, user.password);
+        console.log(user.password);
+
         if (!isPass) {
             throw new BadRequestException();
         }

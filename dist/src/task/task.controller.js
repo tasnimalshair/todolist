@@ -16,69 +16,71 @@ exports.TaskController = void 0;
 const common_1 = require("@nestjs/common");
 const task_service_1 = require("./task.service");
 const create_task_dto_1 = require("./dtos/create-task.dto");
-const commons_1 = require("../../shared/commons");
 const user_decorator_1 = require("../decorators/user.decorator");
-const TokenAuthGuard_1 = require("../guard/TokenAuthGuard");
+const roles_decorator_1 = require("../decorators/roles.decorator");
+const role_enum_1 = require("../roles/role.enum");
+const update_task_dto_1 = require("./dtos/update-task.dto");
 let TaskController = class TaskController {
     constructor(taskService) {
         this.taskService = taskService;
     }
-    async addTask(res, body, userId) {
-        await this.taskService.addTask(body.name, body.description, body.priority, userId);
-        (0, commons_1.returnRes)(res, 200, true, 'Task Added Successfully.', []);
+    async addTask(body, user) {
+        console.log('UUUUUUUUUUSER', user.id);
+        await this.taskService.addTask(body.name, body.description, body.priority, user.id);
+        return 'Task Added Successfully.';
     }
-    async getAllTasks(res, userId) {
-        const tasks = await this.taskService.getTasks(userId);
-        (0, commons_1.returnRes)(res, 200, true, '', tasks);
+    async getAllTasks(user) {
+        const tasks = await this.taskService.getTasks({ where: { userId: user.id } });
+        return tasks;
     }
-    async deleteTask(res, id, userId) {
-        await this.taskService.deleteTask(id, userId);
-        (0, commons_1.returnRes)(res, 200, true, `Task with id ${id} was Deleted Successfully`, []);
+    async deleteTask(id, user) {
+        await this.taskService.deleteTask(id, user.id);
+        return `Task with id ${id} was Deleted Successfully`;
     }
-    async updateTask(res, id, body, userId) {
-        const task = await this.taskService.updateTask(id, body, userId);
-        (0, commons_1.returnRes)(res, 200, true, `Task with id ${id} was Updated Successfully`, task);
+    async updateTask(id, body, user) {
+        console.log('user.id', user.id);
+        const task = await this.taskService.updateTask(id, body, user.id);
+        return `Task with id ${id} was Updated Successfully`;
     }
 };
 __decorate([
+    (0, roles_decorator_1.Roles)(role_enum_1.Role.User),
     (0, common_1.Post)(),
-    __param(0, (0, common_1.Res)()),
-    __param(1, (0, common_1.Body)()),
-    __param(2, (0, user_decorator_1.UserId)()),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, user_decorator_1.User)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, create_task_dto_1.CreateTaskDto, Object]),
+    __metadata("design:paramtypes", [create_task_dto_1.CreateTaskDto, Object]),
     __metadata("design:returntype", Promise)
 ], TaskController.prototype, "addTask", null);
 __decorate([
     (0, common_1.Get)(),
-    __param(0, (0, common_1.Res)()),
-    __param(1, (0, user_decorator_1.UserId)()),
+    (0, roles_decorator_1.Roles)(role_enum_1.Role.User),
+    __param(0, (0, user_decorator_1.User)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], TaskController.prototype, "getAllTasks", null);
 __decorate([
     (0, common_1.Delete)(':id'),
-    __param(0, (0, common_1.Res)()),
-    __param(1, (0, common_1.Param)('id')),
-    __param(2, (0, user_decorator_1.UserId)()),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, user_decorator_1.User)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Number, Object]),
+    __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", Promise)
 ], TaskController.prototype, "deleteTask", null);
 __decorate([
     (0, common_1.Post)(':id'),
-    __param(0, (0, common_1.Res)()),
-    __param(1, (0, common_1.Param)('id')),
-    __param(2, (0, common_1.Body)()),
-    __param(3, (0, user_decorator_1.UserId)()),
+    (0, roles_decorator_1.Roles)(role_enum_1.Role.User),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __param(2, (0, user_decorator_1.User)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Number, create_task_dto_1.CreateTaskDto, Object]),
+    __metadata("design:paramtypes", [Number, update_task_dto_1.UpdateTaskDto, Object]),
     __metadata("design:returntype", Promise)
 ], TaskController.prototype, "updateTask", null);
 TaskController = __decorate([
-    (0, common_1.Controller)('task'),
-    (0, common_1.UseGuards)(TokenAuthGuard_1.TokenAuthGuard),
+    (0, common_1.Controller)('tasks'),
+    (0, roles_decorator_1.Roles)(role_enum_1.Role.Admin),
     __metadata("design:paramtypes", [task_service_1.TaskService])
 ], TaskController);
 exports.TaskController = TaskController;

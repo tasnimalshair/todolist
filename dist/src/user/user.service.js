@@ -15,17 +15,34 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserService = void 0;
 const common_1 = require("@nestjs/common");
 const constants_1 = require("../common/constants");
+const transaction_decorator_1 = require("../decorators/transaction.decorator");
+const create_signup_dto_1 = require("../auth/dtos/create-signup.dto");
 let UserService = class UserService {
     constructor(userRepository) {
         this.userRepository = userRepository;
     }
-    create(name, email, password) {
-        return this.userRepository.create({ name, email, password });
+    create(createSignupUserDto, transaction) {
+        return this.userRepository.create(createSignupUserDto, { transaction });
     }
-    find(email) {
-        return this.userRepository.findAll({ where: { email } });
+    findById(id) {
+        return this.userRepository.findByPk(id);
+    }
+    findOne(options, transaction) {
+        return this.userRepository.findOne({ ...options, transaction });
     }
 };
+__decorate([
+    __param(1, (0, transaction_decorator_1.Transaction)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [create_signup_dto_1.CreateSignupUserDto, Object]),
+    __metadata("design:returntype", void 0)
+], UserService.prototype, "create", null);
+__decorate([
+    __param(1, (0, transaction_decorator_1.Transaction)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", void 0)
+], UserService.prototype, "findOne", null);
 UserService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(constants_1.REPOSITORIES.USER_REPOSITORY)),

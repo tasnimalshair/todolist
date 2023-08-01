@@ -17,30 +17,38 @@ const common_1 = require("@nestjs/common");
 const auth_service_1 = require("./auth.service");
 const create_signin_dto_1 = require("./dtos/create-signin.dto");
 const create_signup_dto_1 = require("./dtos/create-signup.dto");
+const decorators_1 = require("../decorators");
+const transaction_interceptor_1 = require("../interceptor/transaction.interceptor");
 let AuthController = class AuthController {
     constructor(authService) {
         this.authService = authService;
     }
-    signUp(userData) {
-        return this.authService.signup(userData.name, userData.email, userData.password);
+    async signUp(userData, transaction) {
+        const user = await this.authService.signup(userData, transaction);
+        return user;
     }
-    login(userData) {
-        return this.authService.signin(userData.email, userData.password);
+    login(userData, transaction) {
+        return this.authService.signin(userData, transaction);
     }
 };
 __decorate([
-    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    (0, decorators_1.Public)(),
     (0, common_1.Post)(),
+    (0, common_1.UseInterceptors)(transaction_interceptor_1.TransactionInterceptor),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, decorators_1.Transaction)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_signup_dto_1.CreateSignupUserDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:paramtypes", [create_signup_dto_1.CreateSignupUserDto, Object]),
+    __metadata("design:returntype", Promise)
 ], AuthController.prototype, "signUp", null);
 __decorate([
+    (0, decorators_1.Public)(),
     (0, common_1.Get)(),
+    (0, common_1.UseInterceptors)(transaction_interceptor_1.TransactionInterceptor),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, decorators_1.Transaction)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_signin_dto_1.CreateSigninUserDto]),
+    __metadata("design:paramtypes", [create_signin_dto_1.CreateSigninUserDto, Object]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "login", null);
 AuthController = __decorate([

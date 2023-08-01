@@ -11,10 +11,12 @@ const common_1 = require("@nestjs/common");
 const task_controller_1 = require("./task.controller");
 const task_service_1 = require("./task.service");
 const task_provider_1 = require("./task.provider");
+const logger_module_1 = require("../logger/logger.module");
 let TaskModule = class TaskModule {
 };
 TaskModule = __decorate([
     (0, common_1.Module)({
+        imports: [logger_module_1.LoggerModule],
         controllers: [task_controller_1.TaskController],
         providers: [task_service_1.TaskService, ...task_provider_1.TaskProvider],
     })
