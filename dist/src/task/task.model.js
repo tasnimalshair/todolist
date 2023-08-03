@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Task = void 0;
 const sequelize_typescript_1 = require("sequelize-typescript");
 const user_model_1 = require("../user/user.model");
+const kanban_model_1 = require("../kanban/kanban.model");
 const { DATE, NUMBER, STRING } = sequelize_typescript_1.DataType;
 let Task = class Task extends sequelize_typescript_1.Model {
 };
@@ -34,14 +35,6 @@ __decorate([
     __metadata("design:type", Number)
 ], Task.prototype, "priority", void 0);
 __decorate([
-    (0, sequelize_typescript_1.Column)(DATE),
-    __metadata("design:type", Date)
-], Task.prototype, "createdAt", void 0);
-__decorate([
-    (0, sequelize_typescript_1.Column)(DATE),
-    __metadata("design:type", Date)
-], Task.prototype, "updatedAt", void 0);
-__decorate([
     (0, sequelize_typescript_1.ForeignKey)(() => user_model_1.User),
     (0, sequelize_typescript_1.Column)(NUMBER),
     __metadata("design:type", Number)
@@ -50,6 +43,23 @@ __decorate([
     (0, sequelize_typescript_1.BelongsTo)(() => user_model_1.User),
     __metadata("design:type", user_model_1.User)
 ], Task.prototype, "user", void 0);
+__decorate([
+    (0, sequelize_typescript_1.ForeignKey)(() => kanban_model_1.Kanban),
+    (0, sequelize_typescript_1.Column)(NUMBER),
+    __metadata("design:type", Number)
+], Task.prototype, "kanbanId", void 0);
+__decorate([
+    (0, sequelize_typescript_1.BelongsTo)(() => kanban_model_1.Kanban),
+    __metadata("design:type", kanban_model_1.Kanban)
+], Task.prototype, "kanban", void 0);
+__decorate([
+    (0, sequelize_typescript_1.Column)(DATE),
+    __metadata("design:type", Date)
+], Task.prototype, "createdAt", void 0);
+__decorate([
+    (0, sequelize_typescript_1.Column)(DATE),
+    __metadata("design:type", Date)
+], Task.prototype, "updatedAt", void 0);
 __decorate([
     (0, sequelize_typescript_1.Column)(DATE),
     __metadata("design:type", Date)

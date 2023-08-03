@@ -1,0 +1,1 @@
+{"version":3,"file":"kanban.provider.js","sourceRoot":"","sources":["../../../src/kanban/kanban.provider.ts"],"names":[],"mappings":";;;AAAA,mDAAmD;AACnD,iDAAwC;AAE3B,QAAA,cAAc,GAAG;IAC1B;QACI,OAAO,EAAE,wBAAY,CAAC,iBAAiB;QACvC,UAAU,EAAE,GAAG,EAAE;YACb,OAAO,qBAAM,CAAC;QAClB,CAAC;KACJ;CACJ,CAAC"}

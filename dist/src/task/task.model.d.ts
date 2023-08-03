@@ -1,14 +1,17 @@
 import { Model } from 'sequelize-typescript';
 import { User } from '../user/user.model';
+import { Kanban } from 'src/kanban/kanban.model';
 export declare class Task extends Model<Task> {
     id: number;
     name: string;
     description: string;
     priority: number;
-    createdAt: Date;
-    updatedAt: Date;
     userId: number;
     user: User;
+    kanbanId: number;
+    kanban: Kanban;
+    createdAt: Date;
+    updatedAt: Date;
     deletedAt: Date;
     createdBy: string;
     updatedBy: string;

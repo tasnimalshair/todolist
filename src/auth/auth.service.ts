@@ -32,10 +32,8 @@ export class AuthService {
         if (!user) {
             throw new NotFoundException('User not found.');
         }
-        console.log(createSigninUserDto.password);
 
         const isPass = compareSync(createSigninUserDto.password, user.password);
-        console.log(user.password);
 
         if (!isPass) {
             throw new BadRequestException();

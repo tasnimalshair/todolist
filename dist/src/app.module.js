@@ -16,6 +16,8 @@ const task_module_1 = require("./task/task.module");
 const user_module_1 = require("./user/user.module");
 const db_module_1 = require("./db/db.module");
 const logger_module_1 = require("./logger/logger.module");
+const kanban_module_1 = require("./kanban/kanban.module");
+const shared_kanban_board_module_1 = require("./shared-kanban-board/shared-kanban-board.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -25,12 +27,16 @@ AppModule = __decorate([
             user_module_1.UserModule,
             auth_module_1.AuthModule,
             guard_module_1.GuardModule,
+            kanban_module_1.KanbanModule,
+            shared_kanban_board_module_1.SharedKanbanBoardModule,
             db_module_1.DatabaseModule,
             logger_module_1.LoggerModule,
             config_2.ConfigModule.forRoot({
                 load: [config_1.default],
                 isGlobal: true,
             }),
+            kanban_module_1.KanbanModule,
+            shared_kanban_board_module_1.SharedKanbanBoardModule,
         ],
     })
 ], AppModule);

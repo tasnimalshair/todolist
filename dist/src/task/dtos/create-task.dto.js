@@ -25,5 +25,9 @@ __decorate([
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
 ], CreateTaskDto.prototype, "priority", void 0);
+__decorate([
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], CreateTaskDto.prototype, "kanbanId", void 0);
 exports.CreateTaskDto = CreateTaskDto;
 //# sourceMappingURL=create-task.dto.js.map

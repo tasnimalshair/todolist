@@ -1,24 +1,38 @@
-import { Inject, Injectable, NotFoundException, Optional } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException, Optional, forwardRef } from '@nestjs/common';
 import { Task } from './task.model';
 import { CreateTaskDto } from './dtos/create-task.dto';
 import { UpdateTaskDto } from './dtos/update-task.dto';
 import { REPOSITORIES } from 'src/common/constants';
 import { LoggerService } from '../logger/logger.service';
 import { FindOptions, where } from 'sequelize';
+import { KanbanService } from 'src/kanban/kanban.service';
+import { SharedKanbanBoardService } from 'src/shared-kanban-board/shared-kanban-board.service';
 
 @Injectable()
 export class TaskService {
   constructor(
     @Inject(REPOSITORIES.TASK_REPOSITORY)
     private taskModel: typeof Task,
-    private logger: LoggerService
+    @Inject(forwardRef(() => KanbanService))
+    private kanbanService: KanbanService,
+    private logger: LoggerService,
+    private sharedService: SharedKanbanBoardService,
+
+
   ) { }
 
 
 
-  addTask(name: string, description: string, priority: number, userId: number) {
+  async addTask(name: string, description: string, priority: number, userId: number, kanbanId: number) {
     this.logger.myLog();
-    return this.taskModel.create({ name, description, priority, userId });
+
+    const kanban = await this.kanbanService.findOne({ where: { id: kanbanId, userId: userId } });
+    const sharedKanban = await this.sharedService.find({ where: { kanbanId, userId } })
+    if (!kanban && !sharedKanban) {
+      return `Sorry you do not have access to kanban with id ${kanbanId}`
+    }
+    await this.taskModel.create({ name, description, priority, userId, kanbanId });
+    return 'Task Added Successfully.';
   }
 
 
@@ -32,7 +46,7 @@ export class TaskService {
     if (!taskToDelete) {
       throw new NotFoundException('Task not found');
     }
-    
+
     (await taskToDelete).deletedBy = userId;
 
     (await taskToDelete).save();

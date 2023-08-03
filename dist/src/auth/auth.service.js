@@ -40,9 +40,7 @@ let AuthService = class AuthService {
         if (!user) {
             throw new common_1.NotFoundException('User not found.');
         }
-        console.log(createSigninUserDto.password);
         const isPass = (0, bcryptjs_1.compareSync)(createSigninUserDto.password, user.password);
-        console.log(user.password);
         if (!isPass) {
             throw new common_1.BadRequestException();
         }

@@ -15,7 +15,7 @@ import { TaskService } from './task/task.service';
 // 1. We have kanban board
 // 2. In each kanban board, we have a todo
 // 3. User can have multiple kanban boards
-// 4. User can share her kanban board with other users, & they can view it & update it, but not delet it
+// 4. User can share his kanban board with other users, & they can view it & update it, but not delet it
 // 5. The kanban owner can remove access from other users
 
 // 1-M kanban with tasks

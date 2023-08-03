@@ -1,29 +1,14 @@
 'use strict';
 
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    return queryInterface.createTable('Tasks', {
+  up: (queryInterface, Sequelize) => {
+
+    return queryInterface.createTable('Kanbans', {
       id: {
         primaryKey: true,
         autoIncrement: true,
         type: Sequelize.INTEGER,
       },
-      name: {
-        allowNull: false,
-        type: Sequelize.STRING,
-
-      },
-      description: {
-        allowNull: false,
-        type: Sequelize.STRING,
-
-      },
-
-      priority: {
-        type: Sequelize.INTEGER,
-      },
-
 
       userId: {
         type: Sequelize.INTEGER,
@@ -37,7 +22,7 @@ module.exports = {
 
 
       createdAt: {
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'), allowNull: false,
+        defaultValue: Sequelize.fn('NOW'),
         type: Sequelize.DATE
       },
 
@@ -61,19 +46,15 @@ module.exports = {
       deletedBy: {
         type: Sequelize.STRING,
       },
-    },
-    );
+
+
+    });
+
   },
 
-  async down(queryInterface, Sequelize) {
-    return queryInterface.dropTable('Tasks');
-  },
+  down: (queryInterface, Sequelize) => {
+
+    return queryInterface.dropTable('Kanbans');
+
+  }
 };
-
-
-
-
-
-
-
-

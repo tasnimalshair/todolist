@@ -12,13 +12,16 @@ const task_controller_1 = require("./task.controller");
 const task_service_1 = require("./task.service");
 const task_provider_1 = require("./task.provider");
 const logger_module_1 = require("../logger/logger.module");
+const kanban_module_1 = require("../kanban/kanban.module");
+const shared_kanban_board_module_1 = require("../shared-kanban-board/shared-kanban-board.module");
 let TaskModule = class TaskModule {
 };
 TaskModule = __decorate([
     (0, common_1.Module)({
-        imports: [logger_module_1.LoggerModule],
+        imports: [logger_module_1.LoggerModule, (0, common_1.forwardRef)(() => kanban_module_1.KanbanModule), shared_kanban_board_module_1.SharedKanbanBoardModule],
         controllers: [task_controller_1.TaskController],
         providers: [task_service_1.TaskService, ...task_provider_1.TaskProvider],
+        exports: [task_service_1.TaskService]
     })
 ], TaskModule);
 exports.TaskModule = TaskModule;

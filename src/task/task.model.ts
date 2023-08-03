@@ -10,6 +10,7 @@ import {
   BelongsTo,
 } from 'sequelize-typescript';
 import { User } from '../user/user.model';
+import { Kanban } from 'src/kanban/kanban.model';
 const { DATE, NUMBER, STRING } = DataType;
 
 
@@ -31,19 +32,28 @@ export class Task extends Model<Task> {
   @Column(NUMBER)
   priority: number;
 
-  @Column(DATE)
-  createdAt: Date;
-
-  @Column(DATE)
-  updatedAt: Date;
 
   @ForeignKey(() => User)
   @Column(NUMBER)
   userId: number;
 
-
   @BelongsTo(() => User)
   user: User;
+
+  @ForeignKey(() => Kanban)
+  @Column(NUMBER)
+  kanbanId: number;
+
+
+  @BelongsTo(() => Kanban)
+  kanban: Kanban;
+
+
+  @Column(DATE)
+  createdAt: Date;
+
+  @Column(DATE)
+  updatedAt: Date;
 
   @Column(DATE)
   deletedAt: Date;

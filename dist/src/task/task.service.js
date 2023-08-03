@@ -16,14 +16,24 @@ exports.TaskService = void 0;
 const common_1 = require("@nestjs/common");
 const constants_1 = require("../common/constants");
 const logger_service_1 = require("../logger/logger.service");
+const kanban_service_1 = require("../kanban/kanban.service");
+const shared_kanban_board_service_1 = require("../shared-kanban-board/shared-kanban-board.service");
 let TaskService = class TaskService {
-    constructor(taskModel, logger) {
+    constructor(taskModel, kanbanService, logger, sharedService) {
         this.taskModel = taskModel;
+        this.kanbanService = kanbanService;
         this.logger = logger;
+        this.sharedService = sharedService;
     }
-    addTask(name, description, priority, userId) {
+    async addTask(name, description, priority, userId, kanbanId) {
         this.logger.myLog();
-        return this.taskModel.create({ name, description, priority, userId });
+        const kanban = await this.kanbanService.findOne({ where: { id: kanbanId, userId: userId } });
+        const sharedKanban = await this.sharedService.find({ where: { kanbanId, userId } });
+        if (!kanban && !sharedKanban) {
+            return `Sorry you do not have access to kanban with id ${kanbanId}`;
+        }
+        await this.taskModel.create({ name, description, priority, userId, kanbanId });
+        return 'Task Added Successfully.';
     }
     getTasks(options) {
         return this.taskModel.findAll(options);
@@ -54,7 +64,10 @@ let TaskService = class TaskService {
 TaskService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(constants_1.REPOSITORIES.TASK_REPOSITORY)),
-    __metadata("design:paramtypes", [Object, logger_service_1.LoggerService])
+    __param(1, (0, common_1.Inject)((0, common_1.forwardRef)(() => kanban_service_1.KanbanService))),
+    __metadata("design:paramtypes", [Object, kanban_service_1.KanbanService,
+        logger_service_1.LoggerService,
+        shared_kanban_board_service_1.SharedKanbanBoardService])
 ], TaskService);
 exports.TaskService = TaskService;
 //# sourceMappingURL=task.service.js.map

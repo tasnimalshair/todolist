@@ -15,4 +15,7 @@ export class CreateTaskDto {
 
   // @IsNumber({})
   // userId: number; 
+
+  @IsNumber()
+  kanbanId: number;
 }

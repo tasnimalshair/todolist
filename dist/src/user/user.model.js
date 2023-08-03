@@ -13,6 +13,8 @@ exports.User = void 0;
 const sequelize_typescript_1 = require("sequelize-typescript");
 const role_enum_1 = require("../roles/role.enum");
 const task_model_1 = require("../task/task.model");
+const kanban_model_1 = require("../kanban/kanban.model");
+const shared_kanban_board_model_1 = require("../shared-kanban-board/shared-kanban-board.model");
 const { ENUM, DATE, NUMBER, STRING } = sequelize_typescript_1.DataType;
 let User = class User extends sequelize_typescript_1.Model {
 };
@@ -38,6 +40,10 @@ __decorate([
     (0, sequelize_typescript_1.HasMany)(() => task_model_1.Task),
     __metadata("design:type", Array)
 ], User.prototype, "tasks", void 0);
+__decorate([
+    (0, sequelize_typescript_1.HasMany)(() => kanban_model_1.Kanban),
+    __metadata("design:type", Array)
+], User.prototype, "kanban", void 0);
 __decorate([
     (0, sequelize_typescript_1.Column)({
         type: ENUM,
@@ -69,6 +75,10 @@ __decorate([
     (0, sequelize_typescript_1.Column)(STRING),
     __metadata("design:type", String)
 ], User.prototype, "deletedBy", void 0);
+__decorate([
+    (0, sequelize_typescript_1.BelongsToMany)(() => kanban_model_1.Kanban, () => shared_kanban_board_model_1.SharedKanbanBoard, 'sharedByUserId'),
+    __metadata("design:type", Array)
+], User.prototype, "sharedBoards", void 0);
 User = __decorate([
     (0, sequelize_typescript_1.Table)({
         paranoid: true,

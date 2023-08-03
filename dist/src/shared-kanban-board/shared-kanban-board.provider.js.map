@@ -1,0 +1,1 @@
+{"version":3,"file":"shared-kanban-board.provider.js","sourceRoot":"","sources":["../../../src/shared-kanban-board/shared-kanban-board.provider.ts"],"names":[],"mappings":";;;AAAA,mDAAmD;AACnD,2EAAgE;AAEnD,QAAA,oBAAoB,GAAG;IAChC;QACI,OAAO,EAAE,wBAAY,CAAC,wBAAwB;QAC9C,UAAU,EAAE,GAAG,EAAE;YACb,OAAO,6CAAiB,CAAC;QAC7B,CAAC;KACJ;CACJ,CAAC"}

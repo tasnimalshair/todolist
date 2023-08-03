@@ -6,6 +6,8 @@ const sequelize_typescript_1 = require("sequelize-typescript");
 const constants_1 = require("../common/constants");
 const task_model_1 = require("../task/task.model");
 const user_model_1 = require("../user/user.model");
+const kanban_model_1 = require("../kanban/kanban.model");
+const shared_kanban_board_model_1 = require("../shared-kanban-board/shared-kanban-board.model");
 exports.databaseProvider = [
     {
         provide: 'sequelize',
@@ -14,7 +16,7 @@ exports.databaseProvider = [
                 ...configService.get(constants_1.DATABASE_CONFIG),
                 logging: false,
             });
-            sequelize.addModels([user_model_1.User, task_model_1.Task]);
+            sequelize.addModels([user_model_1.User, task_model_1.Task, kanban_model_1.Kanban, shared_kanban_board_model_1.SharedKanbanBoard]);
             return sequelize;
         },
         inject: [config_1.ConfigService],

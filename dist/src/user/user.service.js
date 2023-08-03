@@ -17,9 +17,13 @@ const common_1 = require("@nestjs/common");
 const constants_1 = require("../common/constants");
 const transaction_decorator_1 = require("../decorators/transaction.decorator");
 const create_signup_dto_1 = require("../auth/dtos/create-signup.dto");
+const shared_kanban_board_service_1 = require("../shared-kanban-board/shared-kanban-board.service");
+const kanban_service_1 = require("../kanban/kanban.service");
 let UserService = class UserService {
-    constructor(userRepository) {
+    constructor(userRepository, sharedKanbanBoardService, kanbanService) {
         this.userRepository = userRepository;
+        this.sharedKanbanBoardService = sharedKanbanBoardService;
+        this.kanbanService = kanbanService;
     }
     create(createSignupUserDto, transaction) {
         return this.userRepository.create(createSignupUserDto, { transaction });
@@ -29,6 +33,28 @@ let UserService = class UserService {
     }
     findOne(options, transaction) {
         return this.userRepository.findOne({ ...options, transaction });
+    }
+    async addParticipant(kId, uId, userId) {
+        const kanban = await this.kanbanService.findOne({ where: { id: kId, userId: userId } });
+        if (!kanban) {
+            return 'You do not have this Kanban';
+        }
+        return this.sharedKanbanBoardService.create(kId, uId);
+    }
+    async deleteParticipant(kId, uId, userId) {
+        const userid = parseInt(userId);
+        const kanban = await this.kanbanService.findOne({ where: { id: kId, userId: userid } });
+        if (!kanban) {
+            return 'You do not have this Kanban';
+        }
+        const relation = await this.sharedKanbanBoardService.findOne({ where: { kanbanId: kId, userId: uId } });
+        if (!relation) {
+            return `Kanban ${kId} does not shared with user ${uId}`;
+        }
+        (await kanban).deletedBy = userId;
+        (await kanban).save();
+        await this.sharedKanbanBoardService.delete(uId, kId);
+        return 'Deleted Successfully!';
     }
 };
 __decorate([
@@ -46,7 +72,8 @@ __decorate([
 UserService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(constants_1.REPOSITORIES.USER_REPOSITORY)),
-    __metadata("design:paramtypes", [Object])
+    __metadata("design:paramtypes", [Object, shared_kanban_board_service_1.SharedKanbanBoardService,
+        kanban_service_1.KanbanService])
 ], UserService);
 exports.UserService = UserService;
 //# sourceMappingURL=user.service.js.map

@@ -11,6 +11,8 @@ const common_1 = require("@nestjs/common");
 const user_controller_1 = require("./user.controller");
 const user_service_1 = require("./user.service");
 const user_provider_1 = require("./user.provider");
+const shared_kanban_board_module_1 = require("../shared-kanban-board/shared-kanban-board.module");
+const kanban_module_1 = require("../kanban/kanban.module");
 let UserModule = class UserModule {
 };
 UserModule = __decorate([
@@ -18,6 +20,7 @@ UserModule = __decorate([
         exports: [user_service_1.UserService],
         controllers: [user_controller_1.UserController],
         providers: [user_service_1.UserService, ...user_provider_1.UserProvider],
+        imports: [shared_kanban_board_module_1.SharedKanbanBoardModule, kanban_module_1.KanbanModule]
     })
 ], UserModule);
 exports.UserModule = UserModule;
