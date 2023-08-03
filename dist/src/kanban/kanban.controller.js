@@ -24,7 +24,7 @@ let KanbanController = class KanbanController {
         return this.kanbanService.create(user.id);
     }
     getAll(user) {
-        return this.kanbanService.findAll(user.id);
+        return this.kanbanService.findAll(user.id, user.id);
     }
     delete(id, user) {
         return this.kanbanService.delete(id, user.id);

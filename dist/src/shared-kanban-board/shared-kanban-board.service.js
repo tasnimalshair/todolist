@@ -19,8 +19,8 @@ let SharedKanbanBoardService = class SharedKanbanBoardService {
     constructor(sharedModel) {
         this.sharedModel = sharedModel;
     }
-    create(kId, uId) {
-        return this.sharedModel.create({ kanbanId: kId, userId: uId });
+    create(createDto) {
+        return this.sharedModel.create({ kanbanId: createDto.kanbanId, userId: createDto.userId });
     }
     async get(userId) {
         const shared = await this.sharedModel.findAll({ where: { userId }, attributes: ['kanbanId'] });
@@ -32,8 +32,8 @@ let SharedKanbanBoardService = class SharedKanbanBoardService {
     findOne(options) {
         return this.sharedModel.findOne(options);
     }
-    delete(userId, kanbanId) {
-        return this.sharedModel.destroy({ where: { userId, kanbanId } });
+    delete(dto) {
+        return this.sharedModel.destroy({ where: { userId: dto.userId, kanbanId: dto.kanbanId } });
     }
 };
 SharedKanbanBoardService = __decorate([

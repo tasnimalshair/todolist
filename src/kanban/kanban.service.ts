@@ -6,6 +6,7 @@ import { FindOptions } from 'sequelize';
 import { TaskService } from '../task/task.service';
 import { SharedKanbanBoardService } from '../shared-kanban-board/shared-kanban-board.service';
 import { Task } from 'src/task/task.model';
+import { PartialSharedKanbanBoardDto } from 'src/shared-kanban-board/dtos/partial-shared-kanban-board.dto';
 
 @Injectable()
 export class KanbanService {
@@ -16,15 +17,16 @@ export class KanbanService {
         private taskService: TaskService,
         private sharedKanbanService: SharedKanbanBoardService) { }
 
-    create(userId: string) {
-        return this.kanbanModel.create({ userId });
+    create(createKanbanDto: CreateKanbanDto) {
+        return this.kanbanModel.create(createKanbanDto.userId);
     }
 
     // TODO: how to print json
-    async findAll(userId: number) {
+    // TODO: how to pass just one param {PROBLEM with DTOs} 
+    async findAll({ userId }: PartialSharedKanbanBoardDto, createKanbanDto: CreateKanbanDto) {
         const sharedKanbans = await this.sharedKanbanService.get(userId);
         const shared = await this.kanbanModel.findAll({ where: { id: sharedKanbans.map(s => s) }, include: [Task] })
-        const realKanbans = await this.kanbanModel.findAll({ where: { userId }, include: [Task] });
+        const realKanbans = await this.kanbanModel.findAll({ where: { userId: createKanbanDto.userId }, include: [Task] });
         return `realKanbans:${JSON.stringify(realKanbans)} \r sharedKanbans:${JSON.stringify(shared)}`;
     }
 

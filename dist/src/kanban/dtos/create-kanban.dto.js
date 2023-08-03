@@ -14,8 +14,8 @@ const class_validator_1 = require("class-validator");
 class CreateKanbanDto {
 }
 __decorate([
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
 ], CreateKanbanDto.prototype, "userId", void 0);
 exports.CreateKanbanDto = CreateKanbanDto;
 //# sourceMappingURL=create-kanban.dto.js.map

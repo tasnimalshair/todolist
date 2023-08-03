@@ -34,26 +34,26 @@ let UserService = class UserService {
     findOne(options, transaction) {
         return this.userRepository.findOne({ ...options, transaction });
     }
-    async addParticipant(kId, uId, userId) {
-        const kanban = await this.kanbanService.findOne({ where: { id: kId, userId: userId } });
+    async addParticipant(createDto, userId) {
+        const kanban = await this.kanbanService.findOne({ where: { id: createDto.kanbanId, userId: userId } });
         if (!kanban) {
             return 'You do not have this Kanban';
         }
-        return this.sharedKanbanBoardService.create(kId, uId);
+        return this.sharedKanbanBoardService.create(createDto);
     }
-    async deleteParticipant(kId, uId, userId) {
+    async deleteParticipant(sharedDto, userId) {
         const userid = parseInt(userId);
-        const kanban = await this.kanbanService.findOne({ where: { id: kId, userId: userid } });
+        const kanban = await this.kanbanService.findOne({ where: { id: sharedDto.kanbanId, userId: userid } });
         if (!kanban) {
             return 'You do not have this Kanban';
         }
-        const relation = await this.sharedKanbanBoardService.findOne({ where: { kanbanId: kId, userId: uId } });
+        const relation = await this.sharedKanbanBoardService.findOne({ where: { kanbanId: sharedDto.kanbanId, userId: sharedDto.userId } });
         if (!relation) {
-            return `Kanban ${kId} does not shared with user ${uId}`;
+            return `Kanban ${sharedDto.kanbanId} does not shared with user ${sharedDto.userId}`;
         }
         (await kanban).deletedBy = userId;
         (await kanban).save();
-        await this.sharedKanbanBoardService.delete(uId, kId);
+        await this.sharedKanbanBoardService.delete(sharedDto);
         return 'Deleted Successfully!';
     }
 };

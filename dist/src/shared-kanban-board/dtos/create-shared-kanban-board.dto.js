@@ -9,28 +9,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateTaskDto = void 0;
+exports.SharedKanbanBoardDto = void 0;
 const class_validator_1 = require("class-validator");
-class CreateTaskDto {
+class SharedKanbanBoardDto {
 }
 __decorate([
-    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNumber)(),
     (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", String)
-], CreateTaskDto.prototype, "name", void 0);
-__decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", String)
-], CreateTaskDto.prototype, "description", void 0);
+    __metadata("design:type", Number)
+], SharedKanbanBoardDto.prototype, "kanbanId", void 0);
 __decorate([
     (0, class_validator_1.IsNumber)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", Number)
-], CreateTaskDto.prototype, "priority", void 0);
-__decorate([
-    (0, class_validator_1.IsNumber)(),
-    __metadata("design:type", Number)
-], CreateTaskDto.prototype, "kanbanId", void 0);
-exports.CreateTaskDto = CreateTaskDto;
-//# sourceMappingURL=create-task.dto.js.map
+], SharedKanbanBoardDto.prototype, "userId", void 0);
+exports.SharedKanbanBoardDto = SharedKanbanBoardDto;
+//# sourceMappingURL=create-shared-kanban-board.dto.js.map

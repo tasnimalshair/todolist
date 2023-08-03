@@ -24,7 +24,7 @@ export class KanbanController {
 
     @Get('/all')
     getAll(@User() user) {
-        return this.kanbanService.findAll(user.id);
+        return this.kanbanService.findAll(user.id, user.id);
     }
 
 

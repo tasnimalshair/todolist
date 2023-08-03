@@ -24,13 +24,13 @@ let KanbanService = class KanbanService {
         this.taskService = taskService;
         this.sharedKanbanService = sharedKanbanService;
     }
-    create(userId) {
-        return this.kanbanModel.create({ userId });
+    create(createKanbanDto) {
+        return this.kanbanModel.create(createKanbanDto.userId);
     }
-    async findAll(userId) {
+    async findAll({ userId }, createKanbanDto) {
         const sharedKanbans = await this.sharedKanbanService.get(userId);
         const shared = await this.kanbanModel.findAll({ where: { id: sharedKanbans.map(s => s) }, include: [task_model_1.Task] });
-        const realKanbans = await this.kanbanModel.findAll({ where: { userId }, include: [task_model_1.Task] });
+        const realKanbans = await this.kanbanModel.findAll({ where: { userId: createKanbanDto.userId }, include: [task_model_1.Task] });
         return `realKanbans:${JSON.stringify(realKanbans)} \r sharedKanbans:${JSON.stringify(shared)}`;
     }
     findBy(options) {

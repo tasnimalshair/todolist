@@ -16,15 +16,16 @@ exports.UserController = void 0;
 const common_1 = require("@nestjs/common");
 const decorators_1 = require("../decorators");
 const user_service_1 = require("./user.service");
+const create_shared_kanban_board_dto_1 = require("../shared-kanban-board/dtos/create-shared-kanban-board.dto");
 let UserController = class UserController {
     constructor(userService) {
         this.userService = userService;
     }
     addParticipant(user, body) {
-        return this.userService.addParticipant(body.kId, body.uId, user.id);
+        return this.userService.addParticipant(body, user.id);
     }
     deleteParticipant(user, body) {
-        return this.userService.deleteParticipant(body.kId, body.uId, user.id);
+        return this.userService.deleteParticipant(body, user.id);
     }
 };
 __decorate([
@@ -32,7 +33,7 @@ __decorate([
     __param(0, (0, decorators_1.User)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:paramtypes", [Object, create_shared_kanban_board_dto_1.SharedKanbanBoardDto]),
     __metadata("design:returntype", void 0)
 ], UserController.prototype, "addParticipant", null);
 __decorate([

@@ -1,6 +1,5 @@
 import { Inject, Injectable, NotFoundException, Optional, forwardRef } from '@nestjs/common';
 import { Task } from './task.model';
-import { CreateTaskDto } from './dtos/create-task.dto';
 import { UpdateTaskDto } from './dtos/update-task.dto';
 import { REPOSITORIES } from 'src/common/constants';
 import { LoggerService } from '../logger/logger.service';

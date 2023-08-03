@@ -6,6 +6,7 @@ import { Transaction } from '../decorators/transaction.decorator';
 import { CreateSignupUserDto } from 'src/auth/dtos/create-signup.dto';
 import { SharedKanbanBoardService } from 'src/shared-kanban-board/shared-kanban-board.service';
 import { KanbanService } from 'src/kanban/kanban.service';
+import { SharedKanbanBoardDto } from 'src/shared-kanban-board/dtos/create-shared-kanban-board.dto';
 
 @Injectable()
 export class UserService {
@@ -29,29 +30,29 @@ export class UserService {
     return this.userRepository.findOne({ ...options, transaction });
   }
 
-  async addParticipant(kId: number, uId: number, userId: number) {
-    const kanban = await this.kanbanService.findOne({ where: { id: kId, userId: userId } });
+  async addParticipant(createDto: SharedKanbanBoardDto, userId: number) {
+    const kanban = await this.kanbanService.findOne({ where: { id: createDto.kanbanId, userId: userId } });
     if (!kanban) {
       return 'You do not have this Kanban';
     }
-    return this.sharedKanbanBoardService.create(kId, uId);
+    return this.sharedKanbanBoardService.create(createDto);
   }
 
-  async deleteParticipant(kId: number, uId: number, userId: string) {
+  async deleteParticipant(sharedDto: SharedKanbanBoardDto, userId: string) {
     const userid = parseInt(userId);
-    const kanban = await this.kanbanService.findOne({ where: { id: kId, userId:userid } });
-    
+    const kanban = await this.kanbanService.findOne({ where: { id: sharedDto.kanbanId, userId: userid } });
+
     if (!kanban) {
       return 'You do not have this Kanban';
     }
-    const relation = await this.sharedKanbanBoardService.findOne({ where: { kanbanId: kId, userId: uId } });
+    const relation = await this.sharedKanbanBoardService.findOne({ where: { kanbanId: sharedDto.kanbanId, userId: sharedDto.userId } });
 
     if (!relation) {
-      return `Kanban ${kId} does not shared with user ${uId}`;
+      return `Kanban ${sharedDto.kanbanId} does not shared with user ${sharedDto.userId}`;
     }
     (await kanban).deletedBy = userId;
     (await kanban).save();
-    await this.sharedKanbanBoardService.delete(uId, kId);
+    await this.sharedKanbanBoardService.delete(sharedDto);
     return 'Deleted Successfully!';
   }
 }
