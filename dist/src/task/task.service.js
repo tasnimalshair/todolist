@@ -25,14 +25,15 @@ let TaskService = class TaskService {
         this.logger = logger;
         this.sharedService = sharedService;
     }
-    async addTask(name, description, priority, userId, kanbanId) {
+    async addTask(createDto, userId) {
         this.logger.myLog();
-        const kanban = await this.kanbanService.findOne({ where: { id: kanbanId, userId: userId } });
-        const sharedKanban = await this.sharedService.find({ where: { kanbanId, userId } });
+        const kanban = await this.kanbanService.findOne({ where: { id: createDto.kanbanId, userId } });
+        const sharedKanban = await this.sharedService.find({ where: { kanbanId: createDto.kanbanId, userId } });
         if (!kanban && !sharedKanban) {
-            return `Sorry you do not have access to kanban with id ${kanbanId}`;
+            return `Sorry you do not have access to kanban with id ${createDto.kanbanId}`;
         }
-        await this.taskModel.create({ name, description, priority, userId, kanbanId });
+        const createdTask = await this.taskModel.create(createDto);
+        createdTask.userId = userId;
         return 'Task Added Successfully.';
     }
     getTasks(options) {

@@ -6,6 +6,7 @@ import { LoggerService } from '../logger/logger.service';
 import { FindOptions, where } from 'sequelize';
 import { KanbanService } from 'src/kanban/kanban.service';
 import { SharedKanbanBoardService } from 'src/shared-kanban-board/shared-kanban-board.service';
+import { CreateTaskDto } from './dtos/create-task.dto';
 
 @Injectable()
 export class TaskService {
@@ -17,20 +18,19 @@ export class TaskService {
     private logger: LoggerService,
     private sharedService: SharedKanbanBoardService,
 
-
   ) { }
 
 
-
-  async addTask(name: string, description: string, priority: number, userId: number, kanbanId: number) {
+  async addTask(createDto: CreateTaskDto, userId: number) {
     this.logger.myLog();
 
-    const kanban = await this.kanbanService.findOne({ where: { id: kanbanId, userId: userId } });
-    const sharedKanban = await this.sharedService.find({ where: { kanbanId, userId } })
+    const kanban = await this.kanbanService.findOne({ where: { id: createDto.kanbanId, userId } });
+    const sharedKanban = await this.sharedService.find({ where: { kanbanId: createDto.kanbanId, userId } })
     if (!kanban && !sharedKanban) {
-      return `Sorry you do not have access to kanban with id ${kanbanId}`
+      return `Sorry you do not have access to kanban with id ${createDto.kanbanId}`
     }
-    await this.taskModel.create({ name, description, priority, userId, kanbanId });
+    const createdTask = await this.taskModel.create(createDto);
+    createdTask.userId = userId;
     return 'Task Added Successfully.';
   }
 

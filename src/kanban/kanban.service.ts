@@ -22,7 +22,7 @@ export class KanbanService {
     }
 
     // TODO: how to print json
-    // TODO: how to pass just one param {PROBLEM with DTOs} 
+    // TODO: how to pass just one param {PROBLEM with DTOs}
     async findAll({ userId }: PartialSharedKanbanBoardDto, createKanbanDto: CreateKanbanDto) {
         const sharedKanbans = await this.sharedKanbanService.get(userId);
         const shared = await this.kanbanModel.findAll({ where: { id: sharedKanbans.map(s => s) }, include: [Task] })

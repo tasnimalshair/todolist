@@ -27,7 +27,7 @@ export class TaskController {
   @Roles(Role.User)
   @Post()
   async addTask(@Body() body: CreateTaskDto, @User() user) {
-    return await this.taskService.addTask(body.name, body.description, body.priority, user.id, body.kanbanId);
+    return await this.taskService.addTask(body, user.id);
   }
 
 

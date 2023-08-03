@@ -39,6 +39,10 @@ let UserService = class UserService {
         if (!kanban) {
             return 'You do not have this Kanban';
         }
+        const user = await this.findById(userId);
+        if (!user) {
+            return 'User is not exist';
+        }
         return this.sharedKanbanBoardService.create(createDto);
     }
     async deleteParticipant(sharedDto, userId) {

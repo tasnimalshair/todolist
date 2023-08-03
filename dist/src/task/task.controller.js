@@ -27,7 +27,7 @@ let TaskController = class TaskController {
         this.sharedService = sharedService;
     }
     async addTask(body, user) {
-        return await this.taskService.addTask(body.name, body.description, body.priority, user.id, body.kanbanId);
+        return await this.taskService.addTask(body, user.id);
     }
     async getAllTasks(user, kanbanId) {
         const kanban = this.sharedService.find({ where: { kanbanId } });
