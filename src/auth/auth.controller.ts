@@ -14,9 +14,7 @@ export class AuthController {
     @Post()
     @UseInterceptors(TransactionInterceptor)
     async signUp(@Body() userData: CreateSignupUserDto, @Transaction() transaction) {
-
-        const user = await this.authService.signup(userData, transaction);
-        return user;
+        return this.authService.signup(userData, transaction);
     }
 
     @Public()

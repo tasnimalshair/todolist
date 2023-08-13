@@ -64,16 +64,16 @@ __decorate([
     __metadata("design:type", Date)
 ], User.prototype, "deletedAt", void 0);
 __decorate([
-    (0, sequelize_typescript_1.Column)(STRING),
-    __metadata("design:type", String)
+    (0, sequelize_typescript_1.Column)(NUMBER),
+    __metadata("design:type", Number)
 ], User.prototype, "createdBy", void 0);
 __decorate([
-    (0, sequelize_typescript_1.Column)(STRING),
-    __metadata("design:type", String)
+    (0, sequelize_typescript_1.Column)(NUMBER),
+    __metadata("design:type", Number)
 ], User.prototype, "updatedBy", void 0);
 __decorate([
-    (0, sequelize_typescript_1.Column)(STRING),
-    __metadata("design:type", String)
+    (0, sequelize_typescript_1.Column)(NUMBER),
+    __metadata("design:type", Number)
 ], User.prototype, "deletedBy", void 0);
 __decorate([
     (0, sequelize_typescript_1.BelongsToMany)(() => kanban_model_1.Kanban, () => shared_kanban_board_model_1.SharedKanbanBoard, 'sharedByUserId'),
@@ -81,7 +81,9 @@ __decorate([
 ], User.prototype, "sharedBoards", void 0);
 User = __decorate([
     (0, sequelize_typescript_1.Table)({
+        tableName: 'Users',
         paranoid: true,
+        underscored: true
     })
 ], User);
 exports.User = User;

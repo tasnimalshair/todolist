@@ -11,13 +11,16 @@ const common_1 = require("@nestjs/common");
 const shared_kanban_board_controller_1 = require("./shared-kanban-board.controller");
 const shared_kanban_board_service_1 = require("./shared-kanban-board.service");
 const shared_kanban_board_provider_1 = require("./shared-kanban-board.provider");
+const kanban_module_1 = require("../kanban/kanban.module");
+const user_module_1 = require("../user/user.module");
 let SharedKanbanBoardModule = class SharedKanbanBoardModule {
 };
 SharedKanbanBoardModule = __decorate([
     (0, common_1.Module)({
         controllers: [shared_kanban_board_controller_1.SharedKanbanBoardController],
         providers: [shared_kanban_board_service_1.SharedKanbanBoardService, ...shared_kanban_board_provider_1.SharedKanbanProvider],
-        exports: [shared_kanban_board_service_1.SharedKanbanBoardService]
+        exports: [shared_kanban_board_service_1.SharedKanbanBoardService],
+        imports: [(0, common_1.forwardRef)(() => kanban_module_1.KanbanModule), (0, common_1.forwardRef)(() => user_module_1.UserModule)]
     })
 ], SharedKanbanBoardModule);
 exports.SharedKanbanBoardModule = SharedKanbanBoardModule;

@@ -2,7 +2,7 @@
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
+   up(queryInterface, Sequelize) {
     return queryInterface.createTable('Tasks', {
       id: {
         primaryKey: true,
@@ -25,7 +25,7 @@ module.exports = {
       },
 
 
-      userId: {
+      user_id: {
         type: Sequelize.INTEGER,
         references: {
           model: 'Users',
@@ -36,7 +36,7 @@ module.exports = {
       },
 
 
-      kanbanId: {
+      kanban_id: {
         type: Sequelize.INTEGER,
         references: {
           model: 'Kanbans',
@@ -48,44 +48,38 @@ module.exports = {
 
 
 
-      createdAt: {
+      created_at: {
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
         type: Sequelize.DATE
       },
 
-      createdBy: {
-        type: Sequelize.STRING,
+      created_by: {
+        type: Sequelize.INTEGER,
       },
 
 
-      updatedAt: {
+      updated_at: {
         type: Sequelize.DATE,
       },
 
-      updatedBy: {
-        type: Sequelize.STRING,
+      updated_by: {
+        type: Sequelize.INTEGER,
       },
 
-      deletedAt: {
+      deleted_at: {
         type: Sequelize.DATE,
       },
 
-      deletedBy: {
-        type: Sequelize.STRING,
+      deleted_by: {
+        type: Sequelize.INTEGER,
       },
+
     },
     );
   },
 
-  async down(queryInterface, Sequelize) {
+   down(queryInterface, Sequelize) {
     return queryInterface.dropTable('Tasks');
   },
 };
-
-
-
-
-
-
-
 

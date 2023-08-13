@@ -1,11 +1,10 @@
-import { IsNotEmpty, IsNumber } from "class-validator";
+import { IsInt, IsNotEmpty, IsNumber } from "class-validator";
 
 export class SharedKanbanBoardDto {
     @IsNumber()
-    @IsNotEmpty()
-    kanbanId: number;
+    userId: number;
 
     @IsNumber()
-    @IsNotEmpty()
-    userId: number;
+    kanbanId: number;
+
 }

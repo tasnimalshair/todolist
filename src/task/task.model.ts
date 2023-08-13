@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import {
   Column,
   Model,
@@ -15,7 +14,9 @@ const { DATE, NUMBER, STRING } = DataType;
 
 
 @Table({
+  tableName: 'Tasks',
   paranoid: true,
+  underscored: true
 })
 export class Task extends Model<Task> {
   @PrimaryKey
@@ -58,13 +59,13 @@ export class Task extends Model<Task> {
   @Column(DATE)
   deletedAt: Date;
 
-  @Column(STRING)
-  createdBy: string;
+  @Column(NUMBER)
+  createdBy: number;
 
-  @Column(STRING)
-  updatedBy: string;
+  @Column(NUMBER)
+  updatedBy: number;
 
-  @Column(STRING)
-  deletedBy: string;
+  @Column(NUMBER)
+  deletedBy: number;
 
 }

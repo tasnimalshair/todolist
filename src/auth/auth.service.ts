@@ -1,12 +1,10 @@
-import { BadRequestException, Injectable, NotFoundException, Req, UseInterceptors } from "@nestjs/common";
-import { hashSync, compareSync } from "bcryptjs";
-import { UserService } from "src/user/user.service";
+import { BadRequestException, Injectable, NotFoundException, Req, UseInterceptors } from '@nestjs/common';
+import { hashSync, compareSync } from 'bcryptjs';
+import { UserService } from 'src/user/user.service';
 import { JwtService } from '@nestjs/jwt';
-import { Transaction } from "../decorators/transaction.decorator";
-import { CreateSignupUserDto } from "./dtos/create-signup.dto";
-import { CreateSigninUserDto } from "./dtos/create-signin.dto";
-
-
+import { Transaction } from '../decorators/transaction.decorator';
+import { CreateSignupUserDto } from './dtos/create-signup.dto';
+import { CreateSigninUserDto } from './dtos/create-signin.dto';
 
 @Injectable()
 export class AuthService {
@@ -24,7 +22,6 @@ export class AuthService {
         const user = await this.userService.create(createSignupUserDto, transaction);
 
         return user;
-
     }
 
     async signin(createSigninUserDto: CreateSigninUserDto, @Transaction() transaction) {
@@ -38,6 +35,6 @@ export class AuthService {
         if (!isPass) {
             throw new BadRequestException();
         }
-        return await this.jwtService.sign({ id: user.id });
+        return this.jwtService.sign({ id: user.id });
     }
 }

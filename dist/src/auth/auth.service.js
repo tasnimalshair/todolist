@@ -44,7 +44,7 @@ let AuthService = class AuthService {
         if (!isPass) {
             throw new common_1.BadRequestException();
         }
-        return await this.jwtService.sign({ id: user.id });
+        return this.jwtService.sign({ id: user.id });
     }
 };
 __decorate([

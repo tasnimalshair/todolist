@@ -1,22 +1,29 @@
 import {
   Body,
-  Controller, Get, Post
+  Controller, Get, Post, UseInterceptors
 } from '@nestjs/common';
-import { User } from 'src/decorators';
+import { Transaction, User } from 'src/decorators';
 import { UserService } from './user.service';
 import { SharedKanbanBoardDto } from 'src/shared-kanban-board/dtos/create-shared-kanban-board.dto';
+import { TransactionInterceptor } from 'src/interceptor/transaction.interceptor';
+import { SharedKanbanBoardService } from 'src/shared-kanban-board/shared-kanban-board.service';
 
 @Controller('users')
+@UseInterceptors(TransactionInterceptor)
 export class UserController {
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService,
+    private sharedService: SharedKanbanBoardService) { }
 
   @Post()
-  addParticipant(@User() user, @Body() body: SharedKanbanBoardDto) {
-    return this.userService.addParticipant(body, user.id);
+  addParticipant(@User() user, @Body() body: SharedKanbanBoardDto, @Transaction() transaction) {
+    return this.sharedService.create(body, user.id, transaction);
   }
 
+  @UseInterceptors(TransactionInterceptor)
   @Get()
-  deleteParticipant(@User() user, @Body() body) {
-    return this.userService.deleteParticipant(body, user.id);
+  deleteParticipant(@Transaction() Transaction, @User() user, @Body() body, @Transaction() transaction) {
+    // return this.userService.deleteParticipant(body, user.id, transaction);
+    return this.sharedService.delete(body, user.id, transaction);
+
   }
 }

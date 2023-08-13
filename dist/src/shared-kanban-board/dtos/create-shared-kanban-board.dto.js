@@ -15,13 +15,11 @@ class SharedKanbanBoardDto {
 }
 __decorate([
     (0, class_validator_1.IsNumber)(),
-    (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", Number)
-], SharedKanbanBoardDto.prototype, "kanbanId", void 0);
-__decorate([
-    (0, class_validator_1.IsNumber)(),
-    (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", Number)
 ], SharedKanbanBoardDto.prototype, "userId", void 0);
+__decorate([
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], SharedKanbanBoardDto.prototype, "kanbanId", void 0);
 exports.SharedKanbanBoardDto = SharedKanbanBoardDto;
 //# sourceMappingURL=create-shared-kanban-board.dto.js.map

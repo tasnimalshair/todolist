@@ -16,44 +16,49 @@ exports.KanbanController = void 0;
 const common_1 = require("@nestjs/common");
 const kanban_service_1 = require("./kanban.service");
 const decorators_1 = require("../decorators");
+const transaction_interceptor_1 = require("../interceptor/transaction.interceptor");
 let KanbanController = class KanbanController {
     constructor(kanbanService) {
         this.kanbanService = kanbanService;
     }
-    create(user) {
-        return this.kanbanService.create(user.id);
+    create(user, transaction) {
+        return this.kanbanService.create(user.id, transaction);
     }
-    getAll(user) {
-        return this.kanbanService.findAll(user.id, user.id);
+    getAll(user, transaction) {
+        return this.kanbanService.findAll(user.id, transaction);
     }
-    delete(id, user) {
-        return this.kanbanService.delete(id, user.id);
+    delete(id, user, transaction) {
+        return this.kanbanService.delete(id, user.id, transaction);
     }
 };
 __decorate([
     (0, common_1.Post)(),
     __param(0, (0, decorators_1.User)()),
+    __param(1, (0, decorators_1.Transaction)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", void 0)
 ], KanbanController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)('/all'),
     __param(0, (0, decorators_1.User)()),
+    __param(1, (0, decorators_1.Transaction)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", void 0)
 ], KanbanController.prototype, "getAll", null);
 __decorate([
     (0, common_1.Post)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, decorators_1.User)()),
+    __param(2, (0, decorators_1.Transaction)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:paramtypes", [Object, Object, Object]),
     __metadata("design:returntype", void 0)
 ], KanbanController.prototype, "delete", null);
 KanbanController = __decorate([
     (0, common_1.Controller)('kanbans'),
+    (0, common_1.UseInterceptors)(transaction_interceptor_1.TransactionInterceptor),
     __metadata("design:paramtypes", [kanban_service_1.KanbanService])
 ], KanbanController);
 exports.KanbanController = KanbanController;

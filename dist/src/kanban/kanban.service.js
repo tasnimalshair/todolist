@@ -18,41 +18,74 @@ const constants_1 = require("../common/constants");
 const task_service_1 = require("../task/task.service");
 const shared_kanban_board_service_1 = require("../shared-kanban-board/shared-kanban-board.service");
 const task_model_1 = require("../task/task.model");
+const decorators_1 = require("../decorators");
 let KanbanService = class KanbanService {
     constructor(kanbanModel, taskService, sharedKanbanService) {
         this.kanbanModel = kanbanModel;
         this.taskService = taskService;
         this.sharedKanbanService = sharedKanbanService;
     }
-    create(createKanbanDto) {
-        return this.kanbanModel.create(createKanbanDto.userId);
+    async create(userId, transaction) {
+        return this.kanbanModel.create({ userId, createdBy: userId });
     }
-    async findAll({ userId }, createKanbanDto) {
-        const sharedKanbans = await this.sharedKanbanService.get(userId);
-        const shared = await this.kanbanModel.findAll({ where: { id: sharedKanbans.map(s => s) }, include: [task_model_1.Task] });
-        const realKanbans = await this.kanbanModel.findAll({ where: { userId: createKanbanDto.userId }, include: [task_model_1.Task] });
-        return `realKanbans:${JSON.stringify(realKanbans)} \r sharedKanbans:${JSON.stringify(shared)}`;
+    async findAll(userId, transaction) {
+        const sharedKanbans = await this.sharedKanbanService.get(userId, transaction);
+        const shared = await this.kanbanModel.findAll({ where: { id: sharedKanbans.map(s => s) }, include: [task_model_1.Task], transaction });
+        const realKanbans = await this.kanbanModel.findAll({ where: { userId }, include: [task_model_1.Task], transaction });
+        return { data: { ...realKanbans, ...shared } };
     }
-    findBy(options) {
-        return this.kanbanModel.findAll(options);
+    findBy(options, transaction) {
+        return this.kanbanModel.findAll({ ...options, transaction });
     }
-    findOne(options) {
-        return this.kanbanModel.findOne(options);
+    findOne(options, transaction) {
+        return this.kanbanModel.findOne({ ...options, transaction });
     }
-    async delete(id, userId) {
-        const kanban = await this.findOne({ where: { id, userId } });
+    async delete(id, userId, transaction) {
+        const kanban = await this.findOne({ where: { id, userId } }, transaction);
         if (!kanban) {
             return `You do not have access to kanban ${id}`;
         }
-        (await kanban).deletedBy = userId;
-        (await kanban).save();
+        kanban.deletedBy = userId;
+        kanban.deletedAt = new Date();
+        await kanban.save();
         return this.kanbanModel.destroy({ where: { id, userId } });
     }
 };
+__decorate([
+    __param(1, (0, decorators_1.Transaction)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", Promise)
+], KanbanService.prototype, "create", null);
+__decorate([
+    __param(1, (0, decorators_1.Transaction)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", Promise)
+], KanbanService.prototype, "findAll", null);
+__decorate([
+    __param(1, (0, decorators_1.Transaction)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", void 0)
+], KanbanService.prototype, "findBy", null);
+__decorate([
+    __param(1, (0, decorators_1.Transaction)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", void 0)
+], KanbanService.prototype, "findOne", null);
+__decorate([
+    __param(2, (0, decorators_1.Transaction)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Number, Object]),
+    __metadata("design:returntype", Promise)
+], KanbanService.prototype, "delete", null);
 KanbanService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(constants_1.REPOSITORIES.KANBAN_REPOSITORY)),
     __param(1, (0, common_1.Inject)((0, common_1.forwardRef)(() => task_service_1.TaskService))),
+    __param(2, (0, common_1.Inject)((0, common_1.forwardRef)(() => shared_kanban_board_service_1.SharedKanbanBoardService))),
     __metadata("design:paramtypes", [Object, task_service_1.TaskService,
         shared_kanban_board_service_1.SharedKanbanBoardService])
 ], KanbanService);

@@ -16,10 +16,6 @@ export class CreateTaskDto {
   @IsNotEmpty()
   priority: number;
 
-  // @IsNumber()
-  // @IsNotEmpty()
-  // userId: number;
-
   @IsNumber()
   kanbanId: number;
 }

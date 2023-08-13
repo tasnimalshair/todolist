@@ -13,6 +13,7 @@ const kanban_service_1 = require("./kanban.service");
 const kanban_provider_1 = require("./kanban.provider");
 const task_module_1 = require("../task/task.module");
 const shared_kanban_board_module_1 = require("../shared-kanban-board/shared-kanban-board.module");
+const db_module_1 = require("../db/db.module");
 let KanbanModule = class KanbanModule {
 };
 KanbanModule = __decorate([
@@ -20,7 +21,7 @@ KanbanModule = __decorate([
         controllers: [kanban_controller_1.KanbanController],
         providers: [kanban_service_1.KanbanService, ...kanban_provider_1.KanbanProvider],
         exports: [kanban_service_1.KanbanService],
-        imports: [(0, common_1.forwardRef)(() => task_module_1.TaskModule), shared_kanban_board_module_1.SharedKanbanBoardModule]
+        imports: [(0, common_1.forwardRef)(() => task_module_1.TaskModule), (0, common_1.forwardRef)(() => shared_kanban_board_module_1.SharedKanbanBoardModule), db_module_1.DatabaseModule]
     })
 ], KanbanModule);
 exports.KanbanModule = KanbanModule;

@@ -20,30 +20,23 @@ const user_decorator_1 = require("../decorators/user.decorator");
 const roles_decorator_1 = require("../decorators/roles.decorator");
 const role_enum_1 = require("../roles/role.enum");
 const update_task_dto_1 = require("./dtos/update-task.dto");
-const shared_kanban_board_service_1 = require("../shared-kanban-board/shared-kanban-board.service");
+const decorators_1 = require("../decorators");
+const transaction_interceptor_1 = require("../interceptor/transaction.interceptor");
 let TaskController = class TaskController {
-    constructor(taskService, sharedService) {
+    constructor(taskService) {
         this.taskService = taskService;
-        this.sharedService = sharedService;
     }
-    async addTask(body, user) {
-        return await this.taskService.addTask(body, user.id);
+    addTask(body, user, transaction) {
+        return this.taskService.addTask(body, user.id, transaction);
     }
-    async getAllTasks(user, kanbanId) {
-        const kanban = this.sharedService.find({ where: { kanbanId } });
-        if (!kanban) {
-            return 'You do not have access to this kanban';
-        }
-        const tasks = await this.taskService.getTasks({ where: { userId: user.id || kanbanId } });
-        return tasks;
+    async getAllTasks(user, transaction, kanbanId) {
+        return this.taskService.getTasks({ where: { user_id: user.id || kanbanId } }, kanbanId, transaction);
     }
-    async deleteTask(id, user) {
-        await this.taskService.deleteTask(id, user.id);
-        return `Task with id ${id} was Deleted Successfully`;
+    async deleteTask(id, user, transaction) {
+        return this.taskService.deleteTask(id, user.id, transaction);
     }
-    async updateTask(id, body, user) {
-        const task = await this.taskService.updateTask(id, body, user.id);
-        return `Task with id ${id} was Updated Successfully`;
+    async updateTask(id, body, user, transaction) {
+        return this.taskService.updateTask(id, body, user.id, transaction);
     }
 };
 __decorate([
@@ -51,25 +44,28 @@ __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, user_decorator_1.User)()),
+    __param(2, (0, decorators_1.Transaction)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_task_dto_1.CreateTaskDto, Object]),
-    __metadata("design:returntype", Promise)
+    __metadata("design:paramtypes", [create_task_dto_1.CreateTaskDto, Object, Object]),
+    __metadata("design:returntype", void 0)
 ], TaskController.prototype, "addTask", null);
 __decorate([
     (0, common_1.Get)(':kanbanId'),
     (0, roles_decorator_1.Roles)(role_enum_1.Role.User),
     __param(0, (0, user_decorator_1.User)()),
-    __param(1, (0, common_1.Param)('kanbanId')),
+    __param(1, (0, decorators_1.Transaction)()),
+    __param(2, (0, common_1.Param)('kanbanId')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:paramtypes", [Object, Object, Object]),
     __metadata("design:returntype", Promise)
 ], TaskController.prototype, "getAllTasks", null);
 __decorate([
     (0, common_1.Delete)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, user_decorator_1.User)()),
+    __param(2, (0, decorators_1.Transaction)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:paramtypes", [Number, Object, Object]),
     __metadata("design:returntype", Promise)
 ], TaskController.prototype, "deleteTask", null);
 __decorate([
@@ -78,15 +74,16 @@ __decorate([
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __param(2, (0, user_decorator_1.User)()),
+    __param(3, (0, decorators_1.Transaction)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, update_task_dto_1.UpdateTaskDto, Object]),
+    __metadata("design:paramtypes", [Number, update_task_dto_1.UpdateTaskDto, Object, Object]),
     __metadata("design:returntype", Promise)
 ], TaskController.prototype, "updateTask", null);
 TaskController = __decorate([
     (0, common_1.Controller)('tasks'),
     (0, roles_decorator_1.Roles)(role_enum_1.Role.Admin),
-    __metadata("design:paramtypes", [task_service_1.TaskService,
-        shared_kanban_board_service_1.SharedKanbanBoardService])
+    (0, common_1.UseInterceptors)(transaction_interceptor_1.TransactionInterceptor),
+    __metadata("design:paramtypes", [task_service_1.TaskService])
 ], TaskController);
 exports.TaskController = TaskController;
 //# sourceMappingURL=task.controller.js.map

@@ -44,7 +44,6 @@ export class TokenAuthGuard implements CanActivate {
       const user = await this.userService.findById(decoded.id)
 
       request.user = user.dataValues;
-      
 
       const roleGuard = new RoleGuard(this.reflector);
 

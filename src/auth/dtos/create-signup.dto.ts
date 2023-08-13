@@ -2,11 +2,9 @@ import { IsNotEmpty, IsString, MinLength, IsEmail, Matches } from 'class-validat
 import { Role } from 'src/roles/role.enum';
 
 export class CreateSignupUserDto {
-
     @IsNotEmpty()
     @IsString()
     name: string
-
 
     @IsEmail()
     @IsNotEmpty()
@@ -19,8 +17,7 @@ export class CreateSignupUserDto {
     @MinLength(6)
     password: string
 
-
+    // TODO: Remove this, user is of type user
     @IsString()
     role: Role
-
 }

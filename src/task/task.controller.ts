@@ -5,6 +5,7 @@ import {
   Body,
   Param,
   Delete,
+  UseInterceptors,
 
 } from '@nestjs/common';
 import { TaskService } from './task.service';
@@ -13,41 +14,34 @@ import { User } from '../decorators/user.decorator';
 import { Roles } from '../decorators/roles.decorator';
 import { Role } from '../roles/role.enum';
 import { UpdateTaskDto } from './dtos/update-task.dto';
-import { SharedKanbanBoardService } from 'src/shared-kanban-board/shared-kanban-board.service';
+import { Transaction } from 'src/decorators';
+import { TransactionInterceptor } from 'src/interceptor/transaction.interceptor';
 
 
 @Controller('tasks')
 @Roles(Role.Admin)
+@UseInterceptors(TransactionInterceptor)
 export class TaskController {
   constructor(private taskService: TaskService,
-    private sharedService: SharedKanbanBoardService) { }
+  ) { }
 
 
-  // TODO: USERID known after pipe validation
   @Roles(Role.User)
   @Post()
-  async addTask(@Body() body: CreateTaskDto, @User() user) {
-    return await this.taskService.addTask(body, user.id);
+  addTask(@Body() body: CreateTaskDto, @User() user, @Transaction() transaction) {
+    return this.taskService.addTask(body, user.id, transaction);
   }
 
-
-  // user and participant can get the tasks with their kanbans
   @Get(':kanbanId')
   @Roles(Role.User)
-  async getAllTasks(@User() user, @Param('kanbanId') kanbanId?) {
-    const kanban = this.sharedService.find({ where: { kanbanId } });
-    if (!kanban) {
-      return 'You do not have access to this kanban';
-    }
-    const tasks = await this.taskService.getTasks({ where: { userId: user.id || kanbanId } });
-    return tasks;
+  async getAllTasks(@User() user, @Transaction() transaction, @Param('kanbanId') kanbanId?) {
+    return this.taskService.getTasks({ where: { user_id: user.id || kanbanId } }, kanbanId, transaction);
   }
 
 
   @Delete(':id')
-  async deleteTask(@Param('id') id: number, @User() user) {
-    await this.taskService.deleteTask(id, user.id);
-    return `Task with id ${id} was Deleted Successfully`;
+  async deleteTask(@Param('id') id: number, @User() user, @Transaction() transaction) {
+    return this.taskService.deleteTask(id, user.id, transaction);
   }
 
 
@@ -56,11 +50,11 @@ export class TaskController {
   async updateTask(
     @Param('id') id: number,
     @Body() body: UpdateTaskDto,
-    @User() user
+    @User() user,
+    @Transaction() transaction
   ) {
 
-    const task = await this.taskService.updateTask(id, body, user.id);
-    return `Task with id ${id} was Updated Successfully`;
+     return this.taskService.updateTask(id, body, user.id, transaction);
   }
 
 }

@@ -24,8 +24,7 @@ let AuthController = class AuthController {
         this.authService = authService;
     }
     async signUp(userData, transaction) {
-        const user = await this.authService.signup(userData, transaction);
-        return user;
+        return this.authService.signup(userData, transaction);
     }
     login(userData, transaction) {
         return this.authService.signin(userData, transaction);

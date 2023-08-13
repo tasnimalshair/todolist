@@ -10,7 +10,7 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
 
-      userId: {
+      user_id: {
         type: Sequelize.INTEGER,
         references: {
           model: 'Users',
@@ -21,32 +21,31 @@ module.exports = {
       },
 
 
-      createdAt: {
-        defaultValue: Sequelize.fn('NOW'),
+      created_at: {
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
         type: Sequelize.DATE
       },
 
-      createdBy: {
-        type: Sequelize.STRING,
+      created_by: {
+        type: Sequelize.INTEGER,
       },
 
 
-      updatedAt: {
+      updated_at: {
         type: Sequelize.DATE,
       },
 
-      updatedBy: {
-        type: Sequelize.STRING,
+      updated_by: {
+        type: Sequelize.INTEGER,
       },
 
-      deletedAt: {
+      deleted_at: {
         type: Sequelize.DATE,
       },
 
-      deletedBy: {
-        type: Sequelize.STRING,
+      deleted_by: {
+        type: Sequelize.INTEGER,
       },
-
 
     });
 

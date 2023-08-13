@@ -1,12 +1,12 @@
 import { ConfigService } from '@nestjs/config';
 
 import { Sequelize } from 'sequelize-typescript';
-import { PROVIDERS, DATABASE_CONFIG } from 'src/common/constants';
+import { DATABASE_CONFIG } from 'src/common/constants';
 import { Task } from '../task/task.model';
 import { User } from '../user/user.model';
 import { Kanban } from 'src/kanban/kanban.model';
 import { SharedKanbanBoard } from 'src/shared-kanban-board/shared-kanban-board.model';
-
+import { Injectable } from '@nestjs/common';
 
 export const databaseProvider = [
   {

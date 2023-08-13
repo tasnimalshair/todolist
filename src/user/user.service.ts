@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException, UseInterceptors, forwardRef } from '@nestjs/common';
 import { REPOSITORIES } from 'src/common/constants';
 import { User } from './user.model';
 import { FindOptions } from 'sequelize';
@@ -13,7 +13,9 @@ export class UserService {
   constructor(
     @Inject(REPOSITORIES.USER_REPOSITORY)
     private userRepository: typeof User,
+    @Inject(forwardRef(() => SharedKanbanBoardService))
     private sharedKanbanBoardService: SharedKanbanBoardService,
+
     private kanbanService: KanbanService
   ) { }
 
@@ -22,41 +24,14 @@ export class UserService {
 
   }
 
-  findById(id) {
-    return this.userRepository.findByPk(id);
+  findById(id, @Transaction() transaction?) {
+    return this.userRepository.findByPk(id, { transaction });
   }
 
   findOne(options: FindOptions, @Transaction() transaction) {
     return this.userRepository.findOne({ ...options, transaction });
   }
 
-  async addParticipant(createDto: SharedKanbanBoardDto, userId: number) {
-    const kanban = await this.kanbanService.findOne({ where: { id: createDto.kanbanId, userId: userId } });
-    if (!kanban) {
-      return 'You do not have this Kanban';
-    }
-    const user = await this.findById(userId);
-    if (!user) {
-      return 'User is not exist';
-    }
-    return this.sharedKanbanBoardService.create(createDto);
-  }
 
-  async deleteParticipant(sharedDto: SharedKanbanBoardDto, userId: string) {
-    const userid = parseInt(userId);
-    const kanban = await this.kanbanService.findOne({ where: { id: sharedDto.kanbanId, userId: userid } });
 
-    if (!kanban) {
-      return 'You do not have this Kanban';
-    }
-    const relation = await this.sharedKanbanBoardService.findOne({ where: { kanbanId: sharedDto.kanbanId, userId: sharedDto.userId } });
-
-    if (!relation) {
-      return `Kanban ${sharedDto.kanbanId} does not shared with user ${sharedDto.userId}`;
-    }
-    (await kanban).deletedBy = userId;
-    (await kanban).save();
-    await this.sharedKanbanBoardService.delete(sharedDto);
-    return 'Deleted Successfully!';
-  }
 }

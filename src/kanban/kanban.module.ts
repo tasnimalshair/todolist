@@ -4,11 +4,12 @@ import { KanbanService } from './kanban.service';
 import { KanbanProvider } from './kanban.provider';
 import { TaskModule } from '../task/task.module';
 import { SharedKanbanBoardModule } from 'src/shared-kanban-board/shared-kanban-board.module';
+import { DatabaseModule } from 'src/db/db.module';
 
 @Module({
   controllers: [KanbanController],
   providers: [KanbanService, ...KanbanProvider],
   exports: [KanbanService],
-  imports: [forwardRef(() => TaskModule), SharedKanbanBoardModule]
+  imports: [forwardRef(() => TaskModule), forwardRef(() => SharedKanbanBoardModule), DatabaseModule]
 })
 export class KanbanModule { }

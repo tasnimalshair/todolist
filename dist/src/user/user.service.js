@@ -28,37 +28,11 @@ let UserService = class UserService {
     create(createSignupUserDto, transaction) {
         return this.userRepository.create(createSignupUserDto, { transaction });
     }
-    findById(id) {
-        return this.userRepository.findByPk(id);
+    findById(id, transaction) {
+        return this.userRepository.findByPk(id, { transaction });
     }
     findOne(options, transaction) {
         return this.userRepository.findOne({ ...options, transaction });
-    }
-    async addParticipant(createDto, userId) {
-        const kanban = await this.kanbanService.findOne({ where: { id: createDto.kanbanId, userId: userId } });
-        if (!kanban) {
-            return 'You do not have this Kanban';
-        }
-        const user = await this.findById(userId);
-        if (!user) {
-            return 'User is not exist';
-        }
-        return this.sharedKanbanBoardService.create(createDto);
-    }
-    async deleteParticipant(sharedDto, userId) {
-        const userid = parseInt(userId);
-        const kanban = await this.kanbanService.findOne({ where: { id: sharedDto.kanbanId, userId: userid } });
-        if (!kanban) {
-            return 'You do not have this Kanban';
-        }
-        const relation = await this.sharedKanbanBoardService.findOne({ where: { kanbanId: sharedDto.kanbanId, userId: sharedDto.userId } });
-        if (!relation) {
-            return `Kanban ${sharedDto.kanbanId} does not shared with user ${sharedDto.userId}`;
-        }
-        (await kanban).deletedBy = userId;
-        (await kanban).save();
-        await this.sharedKanbanBoardService.delete(sharedDto);
-        return 'Deleted Successfully!';
     }
 };
 __decorate([
@@ -72,10 +46,17 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", void 0)
+], UserService.prototype, "findById", null);
+__decorate([
+    __param(1, (0, transaction_decorator_1.Transaction)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", void 0)
 ], UserService.prototype, "findOne", null);
 UserService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(constants_1.REPOSITORIES.USER_REPOSITORY)),
+    __param(1, (0, common_1.Inject)((0, common_1.forwardRef)(() => shared_kanban_board_service_1.SharedKanbanBoardService))),
     __metadata("design:paramtypes", [Object, shared_kanban_board_service_1.SharedKanbanBoardService,
         kanban_service_1.KanbanService])
 ], UserService);

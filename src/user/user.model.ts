@@ -15,7 +15,9 @@ import { Kanban } from 'src/kanban/kanban.model';
 import { SharedKanbanBoard } from 'src/shared-kanban-board/shared-kanban-board.model'; const { ENUM, DATE, NUMBER, STRING } = DataType;
 
 @Table({
+  tableName: 'Users',
   paranoid: true,
+  underscored: true
 })
 export class User extends Model<User> {
   @PrimaryKey
@@ -46,7 +48,6 @@ export class User extends Model<User> {
   role: Role;
 
 
-
   @Column(DATE)
   createdAt: Date;
 
@@ -56,14 +57,14 @@ export class User extends Model<User> {
   @Column(DATE)
   deletedAt: Date;
 
-  @Column(STRING)
-  createdBy: string;
+  @Column(NUMBER)
+  createdBy: number;
 
-  @Column(STRING)
-  updatedBy: string;
+  @Column(NUMBER)
+  updatedBy: number;
 
-  @Column(STRING)
-  deletedBy: string;
+  @Column(NUMBER)
+  deletedBy: number;
 
   @BelongsToMany(() => Kanban, () => SharedKanbanBoard, 'sharedByUserId')
   sharedBoards: Kanban[];

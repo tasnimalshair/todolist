@@ -1,16 +1,13 @@
 import { IsNotEmpty, IsString, IsEmail, Matches } from 'class-validator'
 
 export class CreateSigninUserDto {
-
-
-    @IsNotEmpty()
     @IsString()
+    @IsNotEmpty()
     @IsEmail()
     @Matches(/^[\w-]+(?:\.[\w-]+)*@(?:[\w-]+\.)+[a-zA-Z]{2,}$/)
     email: string;
 
-    @IsNotEmpty()
     @IsString()
+    @IsNotEmpty()
     password: string
-
 }

@@ -15,7 +15,6 @@ const config_2 = require("@nestjs/config");
 const task_module_1 = require("./task/task.module");
 const user_module_1 = require("./user/user.module");
 const db_module_1 = require("./db/db.module");
-const logger_module_1 = require("./logger/logger.module");
 const kanban_module_1 = require("./kanban/kanban.module");
 const shared_kanban_board_module_1 = require("./shared-kanban-board/shared-kanban-board.module");
 let AppModule = class AppModule {
@@ -23,20 +22,17 @@ let AppModule = class AppModule {
 AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
+            db_module_1.DatabaseModule,
             task_module_1.TaskModule,
+            kanban_module_1.KanbanModule,
             user_module_1.UserModule,
             auth_module_1.AuthModule,
             guard_module_1.GuardModule,
-            kanban_module_1.KanbanModule,
             shared_kanban_board_module_1.SharedKanbanBoardModule,
-            db_module_1.DatabaseModule,
-            logger_module_1.LoggerModule,
             config_2.ConfigModule.forRoot({
                 load: [config_1.default],
                 isGlobal: true,
             }),
-            kanban_module_1.KanbanModule,
-            shared_kanban_board_module_1.SharedKanbanBoardModule,
         ],
     })
 ], AppModule);

@@ -65,20 +65,22 @@ __decorate([
     __metadata("design:type", Date)
 ], Task.prototype, "deletedAt", void 0);
 __decorate([
-    (0, sequelize_typescript_1.Column)(STRING),
-    __metadata("design:type", String)
+    (0, sequelize_typescript_1.Column)(NUMBER),
+    __metadata("design:type", Number)
 ], Task.prototype, "createdBy", void 0);
 __decorate([
-    (0, sequelize_typescript_1.Column)(STRING),
-    __metadata("design:type", String)
+    (0, sequelize_typescript_1.Column)(NUMBER),
+    __metadata("design:type", Number)
 ], Task.prototype, "updatedBy", void 0);
 __decorate([
-    (0, sequelize_typescript_1.Column)(STRING),
-    __metadata("design:type", String)
+    (0, sequelize_typescript_1.Column)(NUMBER),
+    __metadata("design:type", Number)
 ], Task.prototype, "deletedBy", void 0);
 Task = __decorate([
     (0, sequelize_typescript_1.Table)({
+        tableName: 'Tasks',
         paranoid: true,
+        underscored: true
     })
 ], Task);
 exports.Task = Task;

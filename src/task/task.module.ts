@@ -7,15 +7,15 @@ import { AuthService } from 'src/auth/auth.service';
 import { UserService } from 'src/user/user.service';
 import { UserModule } from 'src/user/user.module';
 import { TaskProvider } from './task.provider';
-import { LoggerModule } from 'src/logger/logger.module';
 import { KanbanModule } from 'src/kanban/kanban.module';
-import { SharedKanbanBoardModule } from 'src/shared-kanban-board/shared-kanban-board.module';
+import { DatabaseModule } from '../db/db.module';
+import { SharedKanbanBoardModule } from '../shared-kanban-board/shared-kanban-board.module';
 
 
 @Module({
-  imports: [LoggerModule, forwardRef(() => KanbanModule), SharedKanbanBoardModule],
-  controllers: [TaskController],
   providers: [TaskService, ...TaskProvider],
+  imports: [forwardRef(() => SharedKanbanBoardModule), forwardRef(() => KanbanModule), DatabaseModule],
+  controllers: [TaskController],
   exports: [TaskService]
 })
 export class TaskModule { }

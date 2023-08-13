@@ -25,8 +25,8 @@ __decorate([
 ], Kanban.prototype, "id", void 0);
 __decorate([
     (0, sequelize_typescript_1.ForeignKey)(() => user_model_1.User),
-    (0, sequelize_typescript_1.Column)(STRING),
-    __metadata("design:type", String)
+    (0, sequelize_typescript_1.Column)(NUMBER),
+    __metadata("design:type", Number)
 ], Kanban.prototype, "userId", void 0);
 __decorate([
     (0, sequelize_typescript_1.BelongsTo)(() => user_model_1.User),
@@ -49,16 +49,16 @@ __decorate([
     __metadata("design:type", Date)
 ], Kanban.prototype, "deletedAt", void 0);
 __decorate([
-    (0, sequelize_typescript_1.Column)(STRING),
-    __metadata("design:type", String)
+    (0, sequelize_typescript_1.Column)(NUMBER),
+    __metadata("design:type", Number)
 ], Kanban.prototype, "createdBy", void 0);
 __decorate([
-    (0, sequelize_typescript_1.Column)(STRING),
-    __metadata("design:type", String)
+    (0, sequelize_typescript_1.Column)(NUMBER),
+    __metadata("design:type", Number)
 ], Kanban.prototype, "updatedBy", void 0);
 __decorate([
-    (0, sequelize_typescript_1.Column)(STRING),
-    __metadata("design:type", String)
+    (0, sequelize_typescript_1.Column)(NUMBER),
+    __metadata("design:type", Number)
 ], Kanban.prototype, "deletedBy", void 0);
 __decorate([
     (0, sequelize_typescript_1.BelongsToMany)(() => user_model_1.User, () => shared_kanban_board_model_1.SharedKanbanBoard, 'kanbanId'),
@@ -66,7 +66,9 @@ __decorate([
 ], Kanban.prototype, "sharedWithUsers", void 0);
 Kanban = __decorate([
     (0, sequelize_typescript_1.Table)({
-        paranoid: true
+        tableName: 'Kanbans',
+        paranoid: true,
+        underscored: true
     })
 ], Kanban);
 exports.Kanban = Kanban;

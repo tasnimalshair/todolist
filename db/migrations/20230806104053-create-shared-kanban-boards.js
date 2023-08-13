@@ -1,16 +1,16 @@
 'use strict';
 
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('SharedKanbanBoards', {
+  up: (queryInterface, Sequelize) => {
+    return queryInterface.createTable('SharedKanbanBoards', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      
-      userId: {
+
+      user_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
@@ -21,7 +21,7 @@ module.exports = {
         onUpdate: 'CASCADE',
       },
 
-      kanbanId: {
+      kanban_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
@@ -33,37 +33,37 @@ module.exports = {
       },
 
 
-      createdAt: {
+      created_at: {
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
         type: Sequelize.DATE
       },
 
-      createdBy: {
-        type: Sequelize.STRING,
+      created_by: {
+        type: Sequelize.INTEGER,
       },
 
 
-      updatedAt: {
+      updated_at: {
         type: Sequelize.DATE,
       },
 
-      updatedBy: {
-        type: Sequelize.STRING,
+      updated_by: {
+        type: Sequelize.INTEGER,
       },
 
-      deletedAt: {
+      deleted_at: {
         type: Sequelize.DATE,
       },
 
-      deletedBy: {
-        type: Sequelize.STRING,
+      deleted_by: {
+        type: Sequelize.INTEGER,
       },
 
 
     });
   },
 
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('SharedKanbanBoards');
+  down: (queryInterface, Sequelize) => {
+    return queryInterface.dropTable('SharedKanbanBoards');
   },
 };
